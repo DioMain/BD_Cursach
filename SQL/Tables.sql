@@ -20,7 +20,8 @@ create table Appointments (
     patient_id int not null,
     foreign key (patient_id) references Users(user_id),
 
-    appointment_date date not null
+    appointment_date date not null,
+    appointment_state int default(0)
 ) tablespace MEDKIT_TS;
 
 create table Diseases (
@@ -47,7 +48,8 @@ create table Diagnoses (
     open_date date not null,
     close_date date,
     note nvarchar2(128),
-    description nvarchar2(512)
+    description nvarchar2(512),
+    diagnose_state int default(0)
 ) tablespace MEDKIT_TS;
 
 create table Symptoms (
