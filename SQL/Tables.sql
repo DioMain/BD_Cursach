@@ -104,11 +104,17 @@ create table DiseasesToSymptoms (
     foreign key (symptom_id) references Symptoms(symptom_id)
 ) tablespace MEDKIT_TS;
 
+-- ДЛЯ ОТЛАДКИ (БУДЕТ УДАЛЕНА НА РЕЛИЗЕ)
+create table DEBUG_LOG (
+    id int generated always as identity (start with 1 increment by 1),
+    primary key (id),
+
+    title nvarchar2(64) not null,
+    description nvarchar2(512) default('DESCRIPTION NOT DEFINED!')
+) tablespace MEDKIT_TS;
+-------
+
 commit;
-
-CREATE PUBLIC SYNONYM USERS_S FOR ADMIN.USERS;
-
-DROP PUBLIC SYNONYM USERS_S;
 
 DROP TABLE DiseasesToSymptoms;
 DROP TABLE DiagnosesToMedicines;
@@ -119,5 +125,7 @@ DROP TABLE Diagnoses;
 DROP TABLE Diseases;
 DROP TABLE Appointments;
 DROP TABLE Users;
+
+DROP TABLE DEBUG_LOG;
 
 commit;

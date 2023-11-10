@@ -6,7 +6,7 @@
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-2H9QVQM:1521/MEDKIT_PDB</jdbc-url>
+      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-SE50MB3:1521/MEDKIT_PDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="Sys" uuid="38ffdf01-45fa-4969-aed0-10633979dc80">
@@ -14,7 +14,7 @@
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-2H9QVQM:1521/MEDKIT_PDB</jdbc-url>
+      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-SE50MB3:1521/MEDKIT_PDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
     <data-source source="LOCAL" name="DOCTOR" uuid="89b5ed03-779e-4027-a4bc-44fc3355f38b">
@@ -22,7 +22,23 @@
       <synchronize>true</synchronize>
       <auto-commit>false</auto-commit>
       <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
-      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-2H9QVQM:1521/MEDKIT_PDB</jdbc-url>
+      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-SE50MB3:1521/MEDKIT_PDB</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="PATIENT" uuid="3bf39e40-cb1e-4814-86f4-95c9de52d780">
+      <driver-ref>oracle.19</driver-ref>
+      <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-SE50MB3:1521/MEDKIT_PDB</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="LOGREG" uuid="0572aad4-b8b4-46a8-a24c-867a57725429">
+      <driver-ref>oracle.19</driver-ref>
+      <synchronize>true</synchronize>
+      <auto-commit>false</auto-commit>
+      <jdbc-driver>oracle.jdbc.OracleDriver</jdbc-driver>
+      <jdbc-url>jdbc:oracle:thin:@//DESKTOP-SE50MB3:1521/MEDKIT_PDB</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>

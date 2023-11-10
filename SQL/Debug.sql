@@ -1,25 +1,14 @@
-create tablespace TEST_SPACE
-    datafile 'C:\Users\1234\Desktop\oradata\ORCL\MEDKIT_PDB\TEST_SPACE.dbf'
-    SIZE 7M
-    AUTOEXTEND ON
-    NEXT 5M
-    MAXSIZE 20M;
+insert into ADMIN.USERS (user_role, name, surname, patronymic, password, birthday)
+values ('DOCTOR', 'TEST', 'TEST', 'TEST', 'PASSWORD', '16.04.2004');
 
-drop tablespace TEST_SPACE including contents and datafiles;
+CALL ADMIN.REGISTRATION_NEW_USER('PATIENT', 'DIMAS',
+                                  'OKULICH', 'IUR`EVICH',
+                                 'PASS', '16.04.2003');
 
-grant SYSDBA to ADMIN;
-
-create table Test (
-    Id int generated always as identity(start with 1 increment by 1),
-    primary key (Id),
-    Name nvarchar2(64) not null
-
-) tablespace TEST_SPACE;
-
-select * from Test;
-
-drop table Test;
+select * from ADMIN.USERS;
 
 insert into DISEASES(NAME, DESCRIPTION) values ('Test', 'AAAAAAA');
 
-select * from USERS_S;
+CALL ADMIN.DEBUG_GET_ALL_USERS();
+
+SELECT * FROM DEBUG_LOG;
