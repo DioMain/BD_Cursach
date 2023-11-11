@@ -4,12 +4,14 @@ CREATE OR REPLACE PROCEDURE REGISTRATION_NEW_USER(
     surname_a in varchar2,
     patronymic_a in varchar2,
     password_a in varchar2,
-    birthday_a in date
+    birthday_a in date,
+    phone_number_a in nvarchar2,
+    email_a in nvarchar2
 )
 AS
 BEGIN
-    INSERT INTO ADMIN.USERS (USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY)
-        values (user_role_a, name_a, surname_a, patronymic_a, password_a, birthday_a);
+    INSERT INTO ADMIN.USERS (USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY, PHONE_NUMBER, EMAIL)
+        values (user_role_a, name_a, surname_a, patronymic_a, password_a, birthday_a, phone_number_a, email_a);
 
     commit;
 end REGISTRATION_NEW_USER;
@@ -55,6 +57,8 @@ BEGIN
 
     commit;
 END;
+
+
 
 DROP PROCEDURE REGISTRATION_NEW_USER;
 DROP PROCEDURE DEBUG_GET_ALL_USERS;
