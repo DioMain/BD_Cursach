@@ -1,0 +1,18 @@
+.common-text {
+    font-family: 'Comfortaa';
+}
+
+.common-button {
+
+}
+
+.common-error-field {
+    color: red;
+}
+
+@font-face {
+    font-family: 'Comfortaa';
+    src: url("../fonts/Comfortaa-VariableFont_wght.ttf") format("ttf");
+    font-weight: normal;
+    font-style: normal;
+}

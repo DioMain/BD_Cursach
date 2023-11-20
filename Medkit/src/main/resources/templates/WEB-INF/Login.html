@@ -1,26 +1,35 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link type="text/css" rel="stylesheet" th:href="@{/css/Login.css}">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="/css/Login.css">
+    <link rel="stylesheet" href="/css/Common.css">
     <title>Login</title>
 </head>
 <body>
-    IS ARE LOGIN PAGE!
+    <div class="login-box">
+        <h1 class="login-title common-text">Вход</h1>
+        <form method="post" action="/api/login" th:object="${loginForm}">
+            <label class="login-input-label common-text">
+                Логин <br>
+                <input type="text" id="name_field" th:field="${loginForm.email}">
+            </label>
+            <br>
+            <label class="login-input-label common-text">
+                Пароль <br>
+                <input type="password" id="password_field" th:field="${loginForm.password}">
+            </label>
+            <br>
+            <input type="submit" value="Подтвердить">
+        </form>
+    </div>
+    <div class="login-registration-link">
+        <a href="/Registration">Регистрация</a>
+    </div>
+    <h2 class="common-error-field" th:utext="${error}"></h2>
 
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>ROLE</th>
-            <th>NAME</th>
-        </tr>
-        <tr th:each="user : ${users}">
-            <td th:utext="${user.id}"></td>
-            <td th:utext="${user.userRole}"></td>
-            <td th:utext="${user.name}"></td>
-        </tr>
-    </table>
-
-    <h1 th:utext="${error}"></h1>
+    <script src="/js/Login.js"></script>
 </body>
 </html>

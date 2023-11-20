@@ -9,7 +9,7 @@ create table Users (
     password nvarchar2(128) not null,
     birthday date not null,
     phone_number nvarchar2(32) not null,
-    email nvarchar2(64) not null
+    email nvarchar2(64) not null unique
 ) tablespace MEDKIT_TS;
 
 create table Appointments (

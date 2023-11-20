@@ -1,0 +1,28 @@
+@charset "UTF-8";
+
+.login-box {
+
+    background-color: darkgray;
+
+    border: solid darkgray;
+    border-radius: 14px;
+
+    margin-top: 250px;
+
+    width: fit-content;
+
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.login-title {
+    text-align: center;
+}
+
+.login-input-label {
+
+}
+
+.login-registration-link {
+    text-align: center;
+}

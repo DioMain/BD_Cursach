@@ -9,9 +9,15 @@ CREATE OR REPLACE PROCEDURE REGISTRATION_NEW_USER(
     email_a in nvarchar2
 )
 AS
+    v_encrypted_raw raw(128);
 BEGIN
+    v_encrypted_raw := dbms_crypto.hash(
+            utl_i18n.string_to_raw( CONCAT(password_a, 'MEDKIT'), 'AL32UTF8'),
+            dbms_crypto.HASH_SH256
+          );
+
     INSERT INTO ADMIN.USERS (USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY, PHONE_NUMBER, EMAIL)
-        values (user_role_a, name_a, surname_a, patronymic_a, password_a, birthday_a, phone_number_a, email_a);
+        values (user_role_a, name_a, surname_a, patronymic_a, v_encrypted_raw, birthday_a, phone_number_a, email_a);
 
     commit;
 end REGISTRATION_NEW_USER;
@@ -22,44 +28,98 @@ IS
     v_result SYS_REFCURSOR;
 BEGIN
     OPEN v_result FOR
-        select USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY, PHONE_NUMBER, EMAIL from USERS;
+        select USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
+               'HIDDEN' AS PASSWORD,
+               BIRTHDAY,
+               SUBSTR(PHONE_NUMBER, 0, 7) || '*******' AS PHONE_NUMBER,
+               EMAIL from USERS;
 
     RETURN v_result;
 end;
 
+CREATE OR REPLACE FUNCTION GET_CURRENT_USER (
+    a_email in NVARCHAR2,
+    a_password in NVARCHAR2
+)
+RETURN SYS_REFCURSOR
+IS
+    v_encrypted raw(128);
+    v_result SYS_REFCURSOR;
+BEGIN
+    v_encrypted := dbms_crypto.hash(
+        utl_i18n.string_to_raw( CONCAT(a_password, 'MEDKIT'), 'AL32UTF8'),
+        dbms_crypto.HASH_SH256
+        );
+
+    OPEN v_result FOR
+        select USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
+               PASSWORD,
+               BIRTHDAY,
+               PHONE_NUMBER,
+               EMAIL from USERS where PASSWORD like v_encrypted and EMAIL like a_email;
+
+    RETURN v_result;
+end;
+
+DROP PROCEDURE REGISTRATION_NEW_USER;
+DROP FUNCTION GET_ALL_USERS;
+DROP FUNCTION GET_CURRENT_USER;
+
+-- DEBUG
+
+CREATE OR REPLACE PROCEDURE GET_CURRENT_USER_DEBUG
+AS
+    user_id INT;
+    user_role nvarchar2(32);
+    user_name nvarchar2(64);
+    user_surname nvarchar2(64);
+    user_patronymic nvarchar2(64);
+    user_password nvarchar2(128);
+    user_birthday date;
+    user_phonenumber nvarchar2(32);
+    user_email nvarchar2(64);
+    user_cursor SYS_REFCURSOR;
+BEGIN
+    user_cursor := GET_CURRENT_USER('dima123.zample@gmail.com', 'ADMINN');
+
+    LOOP
+        FETCH user_cursor INTO user_id, user_role, user_name, user_surname, user_patronymic, user_password, user_birthday, user_phonenumber, user_email;
+
+        EXIT WHEN user_cursor%NOTFOUND;
+
+        INSERT INTO ADMIN.DEBUG_LOG (TITLE, DESCRIPTION)
+            values ('USER_INFO', 'ID: ' || user_id || ', NAME: ' || user_name || ', ROLE: ' || user_role || ', PASSWORD: ' || user_password || ', PHONE NUMBER: ' || user_phonenumber);
+    END LOOP;
+
+    CLOSE user_cursor;
+END;
+
 CREATE OR REPLACE PROCEDURE DEBUG_GET_ALL_USERS
 AS
-BEGIN
-
-    DECLARE user_id INT;
+     user_id INT;
         user_role nvarchar2(32);
         user_name nvarchar2(64);
         user_surname nvarchar2(64);
         user_patronymic nvarchar2(64);
         user_password nvarchar2(128);
         user_birthday date;
+        user_phonenumber nvarchar2(32);
+        user_email nvarchar2(64);
         user_cursor SYS_REFCURSOR;
-    BEGIN
-
+BEGIN
     user_cursor := GET_ALL_USERS();
 
     LOOP
-        FETCH user_cursor INTO user_id, user_role, user_name, user_surname, user_patronymic, user_password, user_birthday;
+        FETCH user_cursor INTO user_id, user_role, user_name, user_surname, user_patronymic, user_password, user_birthday, user_phonenumber, user_email;
 
         EXIT WHEN user_cursor%NOTFOUND;
 
         INSERT INTO ADMIN.DEBUG_LOG (TITLE, DESCRIPTION)
-            values ('USER_INFO', 'ID: ' || TO_CHAR(user_id) || ', NAME: ' || TO_CHAR(user_name) || ', ROLE: ' || TO_CHAR(user_role));
+            values ('USER_INFO', 'ID: ' || user_id || ', NAME: ' || user_name || ', ROLE: ' || user_role || ', PASSWORD: ' || user_password || ', PHONE NUMBER: ' || user_phonenumber);
     END LOOP;
 
     CLOSE user_cursor;
-    END;
-
-    commit;
 END;
 
-
-
-DROP PROCEDURE REGISTRATION_NEW_USER;
 DROP PROCEDURE DEBUG_GET_ALL_USERS;
-DROP FUNCTION GET_ALL_USERS;
+DROP PROCEDURE GET_CURRENT_USER_DEBUG;
