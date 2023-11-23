@@ -5,6 +5,8 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.Getter;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Date;
 
 @Getter
@@ -12,7 +14,7 @@ public class JwtService {
 
     private final String secret = "MEDKIT";
 
-    private final int expiration = 120;
+    private final int expiration = 120000;
 
     public String generateToken(String userEmail, String userRawPassword) {
         Date now = new Date();
@@ -23,13 +25,15 @@ public class JwtService {
                 .claim("password", userRawPassword)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, secret)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
 
     public boolean validateToken(String token){
         try {
-            Jwts.parser().setSigningKey(secret).parseClaimsJwt(token);
+            Jwts.parser()
+                    .setSigningKey(secret)
+                    .parseClaimsJws(token);
 
             return true;
         }

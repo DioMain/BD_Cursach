@@ -6,7 +6,7 @@ CALL ADMIN.REGISTRATION_NEW_USER('ADMIN', 'ADMIN',
                                  'ADMIN', '16.04.2004',
                                     '+375297080318', 'dima1234.zample@gmail.com');
 
-DELETE FROM ADMIN.USERS WHERE NAME like 'ADMIN';
+DELETE FROM ADMIN.USERS WHERE USERS.EMAIL like 'dima123.example@gmail.com';
 
 DELETE FROM ADMIN.DEBUG_LOG;
 

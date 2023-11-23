@@ -1,8 +1,7 @@
-package com.medkit.form;
+package com.medkit.forms;
 
 import lombok.*;
 
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

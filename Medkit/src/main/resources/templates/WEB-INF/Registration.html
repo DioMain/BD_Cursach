@@ -3,54 +3,82 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/css/Common.css">
+    <link rel="stylesheet" th:href="@{/css/Registration.css}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <title>Registration</title>
 </head>
 <body>
-    <div>
-        <form>
-            <label>
-                Имя
-                <input type="text">
-            </label><br>
-            <label>
-                Фамилия
-                <input type="text">
-            </label><br>
-            <label>
-                Отечество
-                <input type="text">
-            </label><br>
+    <div class="registration-block">
+        <h1 class="h-50 text-center">Регистрация</h1>
+        <form method="post" class="flex-column" style="display: flex" th:object="${registrationForm}" th:action="@{/api/registration}">
+            <div class="justify-content-md-center" style="margin-top: 20px">
+                <label class="form-group">
+                    Имя<br>
+                    <input class="form-control" type="text" th:field="${registrationForm.name}">
+                </label>
+                <label class="form-group" style="margin-left: 30px">
+                    Фамилия<br>
+                    <input class="form-control" type="text" th:field="${registrationForm.surname}">
+                </label>
+                <label class="form-group" style="margin-left: 30px">
+                    Отечество<br>
+                    <input class="form-control" type="text" th:field="${registrationForm.patronymic}">
+                </label>
+            </div>
             <div>
-                Роль
-                <br>
-                <label>
-                    Администратор
-                    <input type="radio">
+                <h4>Роль</h4>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="r_0" type="radio" name="role" value="ADMIN"  th:field="${registrationForm.role}">
+                        <label class="form-check-label" for="r_0">Администратор</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="r_1" type="radio" name="role" value="DOCTOR" th:field="${registrationForm.role}">
+                        <label class="form-check-label" for="r_1">Доктор</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" id="r_2" type="radio" name="role" value="PATIENT" th:field="${registrationForm.role}">
+                        <label class="form-check-label" for="r_2">Пациент</label>
+                    </div>
+                </div><br>
+            </div>
+            <div>
+                <label class="form-group">
+                    Телефонный номер
+                    <input class="form-control" type="text" th:field="${registrationForm.phoneNumber}">
                 </label>
-                <label>
-                    Доктор
-                    <input type="radio">
+                <label class="form-group" style="margin-left: 30px">
+                    Почта
+                    <input class="form-control" type="email" th:field="${registrationForm.email}">
                 </label>
-                <label>
-                    Пациет
-                    <input type="radio">
-                </label>
-            </div><br>
-            <label>
-                Телефонный номер
-                <input type="text">
-            </label>
-            <label>
-                Почта
-                <input type="email">
-            </label>
-            <label>
-                Дата рождения
-                <input type="date">
-            </label>
-        </form>
-    </div>
+                <label class="form-group" style="margin-left: 30px">
+                    Дата рождения
+                    <input class="form-control" type="date" th:field="${registrationForm.birthday}">
+                </label><br>
+            </div>
+            <div class="d-flex justify-content-end">
+                <div>
+                    <label class="form-group">
+                        Пароль<br>
+                        <input class="form-control" type="password" th:field="${registrationForm.password}">
+                    </label><br>
+                    <label class="form-group">
+                        Подтверждение пароля<br>
+                        <input class="form-control" type="password" th:field="${registrationForm.confirmPassword}">
+                    </label><br>
 
+                    <input class="btn btn-success" type="submit" value="Подтвердить">
+                </div>
+            </div>
+        </form>
+
+    </div><br>
+    <div class="btn-link text-center"><a th:href="@{/Login}">Вернуться к входу</a></div>
+    <h2 th:utext="${error}" class="text-danger"></h2>
+    <h1 th:if="${registrationSuccess}" class="">Регистрация завершена успешно!</h1>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

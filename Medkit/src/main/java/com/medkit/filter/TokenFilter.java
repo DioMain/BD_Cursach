@@ -18,8 +18,7 @@ public class TokenFilter implements Filter {
 
     @SneakyThrows
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
-            throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) {
 
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -41,7 +40,7 @@ public class TokenFilter implements Filter {
             log.info("Not valid jwt token!");
 
             response.setCharacterEncoding("UTF-8");
-            response.sendRedirect("/login");
+            response.sendRedirect("/Login");
         }
         else {
             String email = jwt.getUserEmailFromToken(authKey.getValue());
@@ -51,14 +50,26 @@ public class TokenFilter implements Filter {
 
             assert instance != null;
 
-            instance.login(email, password);
+            if (instance.login(email, password)){
+                SessionManager.getInstance().createSession(instance.getCurrentUser().getUserRole(), request.getSession().getId());
 
-            SessionManager.getInstance().createSession(instance.getCurrentUser().getUserRole(), request.getSession().getId());
+                instance = SessionManager.getSession(request.getSession().getId());
 
-            log.info("Create oracle session on [SID: " + request.getSession().getId() +
-                                                ", ROLE: " + instance.getCurrentUser().getUserRole() + "];");
+                assert instance != null;
 
-            chain.doFilter(request, response);
+                instance.login(email, password);
+
+                log.info("Create oracle session on [SID: " + request.getSession().getId() +
+                        ", ROLE: " + instance.getCurrentUser().getUserRole() + "];");
+
+                chain.doFilter(request, response);
+            }
+            else {
+                log.info("Login failed!");
+
+                response.setCharacterEncoding("UTF-8");
+                response.sendRedirect("/Login");
+            }
         }
     }
 }

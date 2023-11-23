@@ -38,7 +38,7 @@ public class SessionInstance implements Closeable {
             }
             case PATIENT -> {
                 connection = createConnection(SessionManager.getInstance().getPatientName(),
-                                              SessionManager.getInstance().getLogregPassword());
+                                              SessionManager.getInstance().getPatientPassword());
             }
             case LOGIN_REGISTRATION -> {
                 connection = createConnection(SessionManager.getInstance().getLogregName(),
@@ -56,7 +56,7 @@ public class SessionInstance implements Closeable {
         try {
             currentUser = userRepository.login(email, password);
         }
-        catch (SQLException exception) {
+        catch (Exception exception) {
             log.error(exception.getMessage());
 
             return false;

@@ -1,10 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/MainPage.css}">
     <title>MedKit</title>
 </head>
 <body>
-    <h1>Welcome</h1>
+
+<div class="main-container">
+    <div>
+        <form class="form-group">
+            <div th:if="${user.userRole.getValue()} == PATIENT">
+                <input type="button" class="btn btn-success btn-block" value="Записаться на приём"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Медецинская карта"><br>
+            </div>
+            <div th:if="${user.userRole.getValue()} == DOCTOR">
+                <input type="button" class="btn btn-success btn-block" value="Создать диагноз"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Текущие диагнозы"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Все приёмы"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Все диагнозы"><br>
+            </div>
+            <div th:if="${user.userRole.getValue()} == ADMIN">
+                <input type="button" class="btn btn-primary btn-block" value="Список болезней"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Список симптомов"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Список лекарств"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Список пользователей"><br>
+            </div>
+        </form>
+    </div>
+    <div style="margin-left: 25px">
+        <h4>
+            <span th:utext="${user.surname}"></span>
+            <span th:utext="${user.name}"></span>
+            <span th:utext="${user.patronymic}"></span>
+        </h4><br>
+        <h5>
+            <span>РОЛЬ: </span>
+            <span th:utext="${user.userRole.getValue()}"></span>
+        </h5>
+        <h5>
+            <span>ПОЧТА: </span>
+            <span th:utext="${user.email}"></span>
+        </h5>
+        <h5>
+            <span>ТЕЛЕФОННЫЙ НОМЕР: </span>
+            <span th:utext="${user.phoneNumber}"></span>
+        </h5>
+        <h5>
+            <span>ДАТА РОЖДЕНИЯ: </span>
+            <span th:utext="${user.birthday}"></span>
+        </h5>
+        <form class="btn-group" style="margin-top: 30px">
+            <input onclick="window.location.replace('/app/UserEditor')" type="button" class="btn btn-primary" value="Редактировать"><br>
+            <input type="button" class="btn btn-danger" value="Удалить"><br>
+            <input type="button" class="btn btn-danger" value="Выйти"><br>
+        </form>
+    </div>
+</div>
+    <h3 th:if="${session.mainPageMessage}" th:utext="${session.mainPageMessage}" ></h3>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

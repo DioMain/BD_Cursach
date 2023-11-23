@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>MEDKIT USER</title>
+    <style>
+        .editor-container {
+            padding: 25px;
+
+            width: fit-content;
+
+            margin-left: auto;
+            margin-right: auto;
+
+            margin-top: 50px;
+        }
+    </style>
+</head>
+<body onload="">
+
+    <div class="editor-container d-flex flex-column">
+        <h2 class="text-center">Редактор пользователя</h2>
+        <div class="justify-content-md-center" style="margin-top: 20px">
+            <label class="form-group">
+                Имя<br>
+                <input class="form-control" id="" type="text" th:default="${user.name}" th:field="${userForm.name}">
+            </label>
+            <label class="form-group" style="margin-left: 30px">
+                Фамилия<br>
+                <input class="form-control" type="text" th:field="${userForm.surname}">
+            </label>
+            <label class="form-group" style="margin-left: 30px">
+                Отечество<br>
+                <input class="form-control" type="text" th:value="${user.patronymic}" th:field="${userForm.patronymic}">
+            </label>
+        </div>
+        <div>
+            <label class="form-group">
+                Телефонный номер
+                <input class="form-control" type="text" th:field="${userForm.phoneNumber}">
+            </label>
+            <label class="form-group" style="margin-left: 30px">
+                Дата рождения
+                <input class="form-control" type="date" th:field="${userForm.birthday}">
+            </label><br>
+        </div>
+        <div class="d-flex flex-row justify-content-end">
+            <div>
+                <input type="button" class="btn btn-danger" value="Назад">
+                <input type="button" class="btn btn-primary" value="Подтвердить">
+            </div>
+        </div>
+    </div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script>
+    function setFields() {
+
+    }
+</script>
+</body>
+</html>

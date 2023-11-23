@@ -2,12 +2,12 @@
 
 .login-box {
 
-    background-color: darkgray;
+    padding: 24px;
 
-    border: solid darkgray;
-    border-radius: 14px;
+    border-radius: 16px;
+    background: #D9D9D9;
 
-    margin-top: 250px;
+    margin-top: 100px;
 
     width: fit-content;
 

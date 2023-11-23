@@ -1,0 +1,22 @@
+.main-container {
+    display: flex;
+
+    flex-direction: row;
+
+    margin-right: auto;
+    margin-left: auto;
+
+    width: fit-content;
+
+    margin-top: 75px;
+
+    background-color: #D9D9D9;
+
+    border-radius: 12px;
+
+    padding: 25px;
+
+    flex-shrink: inherit;
+
+    justify-content: space-between;
+}

@@ -3,33 +3,34 @@
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="stylesheet" href="/css/Login.css">
-    <link rel="stylesheet" href="/css/Common.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" th:href="@{/css/Login.css}">
     <title>Login</title>
 </head>
 <body>
     <div class="login-box">
-        <h1 class="login-title common-text">Вход</h1>
-        <form method="post" action="/api/login" th:object="${loginForm}">
-            <label class="login-input-label common-text">
-                Логин <br>
-                <input type="text" id="name_field" th:field="${loginForm.email}">
-            </label>
+        <h1 class="text-xl-center">Вход</h1>
+        <form class="justify-content-center"  th:action="@{/api/login}" th:object="${loginForm}" method="post">
+            <div class="form-group">
+                <label for="email_input">Почта</label><br>
+                <input class="form-control" type="email" id="email_input" th:field="${loginForm.email}">
+            </div>
             <br>
-            <label class="login-input-label common-text">
-                Пароль <br>
-                <input type="password" id="password_field" th:field="${loginForm.password}">
-            </label>
+            <div class="form-group">
+                <label for="password_input">Пароль</label><br>
+                <input class="form-control" type="password" id="password_input" th:field="${loginForm.password}">
+            </div>
             <br>
-            <input type="submit" value="Подтвердить">
+            <input class="btn btn-primary btn-block" type="submit" value="Подтвердить">
         </form>
     </div>
-    <div class="login-registration-link">
+    <div class="btn-link text-center">
         <a href="/Registration">Регистрация</a>
     </div>
-    <h2 class="common-error-field" th:utext="${error}"></h2>
+    <h2 class="text-danger text-center" style="color: red" th:utext="${error}"></h2>
 
-    <script src="/js/Login.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
 </html>

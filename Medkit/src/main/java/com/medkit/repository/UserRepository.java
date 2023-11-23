@@ -16,17 +16,44 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
     @Override
     public void insert(User element) throws SQLException {
+        String sql = "{call ADMIN.REGISTRATION_NEW_USER(?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setString(1, element.getUserRole().getValue());
+            statement.setString(2, element.getName());
+            statement.setString(3, element.getSurname());
+            statement.setString(4, element.getPatronymic());
+            statement.setString(5, element.getPassword());
+            statement.setDate(6, new java.sql.Date(element.getBirthday().getTime()));
+            statement.setString(7, element.getPhoneNumber());
+            statement.setString(8, element.getEmail());
 
+            statement.execute();
+        }
     }
 
     @Override
     public void delete(User element) throws SQLException {
+        String sql = "{call ADMIN.DELETE_CURRENT_USER(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setInt(1, element.getId());
 
+            statement.execute();
+        }
     }
 
     @Override
     public void update(User element) throws SQLException {
+        String sql = "{call ADMIN.UPDATE_CURRENT_USER(?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setInt(1, element.getId());
+            statement.setString(2, element.getName());
+            statement.setString(3, element.getSurname());
+            statement.setString(4, element.getPatronymic());
+            statement.setDate(5, new java.sql.Date(element.getBirthday().getTime()));
+            statement.setString(6, element.getPhoneNumber());
 
+            statement.execute();
+        }
     }
 
     @Override
@@ -53,12 +80,13 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public User login(String email, String password) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_CURRENT_USER()}";
+        String sql = "{call ? := ADMIN.GET_CURRENT_USER(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
-            statement.setString(0, email);
-            statement.setString(1, password);
-
             statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.setString(2, email);
+            statement.setString(3, password);
+
 
             statement.execute();
 
@@ -80,13 +108,14 @@ public class UserRepository extends OracleRepositoryBase<User> {
             String name = resultSet.getString("name");
             String surname = resultSet.getString("surname");
             String patronymic = resultSet.getString("patronymic");
+            String password = resultSet.getString("password");
 
             Date birthday = resultSet.getDate("birthday");
 
             String phoneNumber = resultSet.getString("phone_number");
             String email = resultSet.getString("email");
 
-            users.add(new User(id, role, name, surname, patronymic, phoneNumber, email, birthday));
+            users.add(new User(id, role, name, surname, password, patronymic, phoneNumber, email, birthday));
         }
 
         return users;

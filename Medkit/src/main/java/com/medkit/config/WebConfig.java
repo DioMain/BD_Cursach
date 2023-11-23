@@ -31,7 +31,6 @@ public class WebConfig implements WebMvcConfigurer {
         engine.setTemplateResolver(templateResolver());
 
 
-
         return engine;
     }
 

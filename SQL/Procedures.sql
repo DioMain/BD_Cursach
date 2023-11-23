@@ -1,3 +1,5 @@
+--USERS
+
 CREATE OR REPLACE PROCEDURE REGISTRATION_NEW_USER(
     user_role_a in varchar2,
     name_a in varchar2,
@@ -61,9 +63,42 @@ BEGIN
     RETURN v_result;
 end;
 
+CREATE OR REPLACE PROCEDURE UPDATE_CURRENT_USER (
+    user_id_a in int,
+    name_a in varchar2,
+    surname_a in varchar2,
+    patronymic_a in varchar2,
+    birthday_a in date,
+    phone_number_a in nvarchar2
+)
+AS
+BEGIN
+    UPDATE ADMIN.USERS
+        SET
+            ADMIN.USERS.NAME = name_a,
+            ADMIN.USERS.SURNAME = surname_a,
+            ADMIN.USERS.PATRONYMIC = patronymic_a,
+            ADMIN.USERS.BIRTHDAY = birthday_a,
+            ADMIN.USERS.PHONE_NUMBER = phone_number_a
+        WHERE
+            ADMIN.USERS.USER_ID = user_id_a;
+end;
+
+CREATE OR REPLACE PROCEDURE DELETE_CURRENT_USER (
+    user_id_a in int
+)
+AS
+BEGIN
+    DELETE FROM ADMIN.USERS WHERE ADMIN.USERS.USER_ID = user_id_a;
+end;
+
 DROP PROCEDURE REGISTRATION_NEW_USER;
 DROP FUNCTION GET_ALL_USERS;
 DROP FUNCTION GET_CURRENT_USER;
+DROP PROCEDURE DELETE_CURRENT_USER;
+DROP PROCEDURE UPDATE_CURRENT_USER;
+
+--
 
 -- DEBUG
 
