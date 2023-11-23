@@ -14,7 +14,7 @@ public class JwtService {
 
     private final String secret = "MEDKIT";
 
-    private final int expiration = 120000;
+    private final int expiration = 5 * 60 * 1000;
 
     public String generateToken(String userEmail, String userRawPassword) {
         Date now = new Date();

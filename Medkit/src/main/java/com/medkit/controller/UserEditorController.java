@@ -41,22 +41,32 @@ public class UserEditorController {
     }
 
     @GetMapping({ "/app/UserEditor" })
-    public ModelAndView userEditorPage(Model model, HttpServletRequest request){
+    public ModelAndView userEditorPage(HttpServletRequest request){
         ModelAndView mav = new ModelAndView("UserEditor");
 
         SessionInstance instance = SessionManager.getSession(request.getSession().getId());
 
         assert instance != null;
 
-        mav.getModelMap().addAttribute("user", instance.getCurrentUser());
-        mav.getModelMap().addAttribute("userForm", new UserEditorForm());
+        User user = instance.getCurrentUser();
+
+        UserEditorForm form = new UserEditorForm();
+
+        form.setName(user.getName());
+        form.setSurname(user.getSurname());
+        form.setPatronymic(user.getPatronymic());
+
+        form.setBirthday(user.getBirthday().toString());
+        form.setPhoneNumber(user.getPhoneNumber());
+
+        mav.getModelMap().addAttribute("userForm", form);
         mav.getModelMap().addAttribute("error", "");
 
         return mav;
     }
 
     @PostMapping({ "/app/UserEditor_post" })
-    public ModelAndView userEditorPost(Model model, HttpServletRequest request,
+    public ModelAndView userEditorPost(HttpServletRequest request,
                                        @Valid @ModelAttribute("userForm") UserEditorForm form,
                                        BindingResult validationResult) throws ParseException, SQLException {
 

@@ -18,49 +18,48 @@
         }
     </style>
 </head>
-<body onload="">
+<body>
 
-    <div class="editor-container d-flex flex-column">
+    <form class="editor-container d-flex flex-column" th:object="${userForm}" th:action="@{/app/UserEditor_post}" method="post">
         <h2 class="text-center">Редактор пользователя</h2>
         <div class="justify-content-md-center" style="margin-top: 20px">
             <label class="form-group">
                 Имя<br>
-                <input class="form-control" id="" type="text" th:default="${user.name}" th:field="${userForm.name}">
+                <input class="form-control" id="fname" type="text" th:field="${userForm.name}">
             </label>
             <label class="form-group" style="margin-left: 30px">
                 Фамилия<br>
-                <input class="form-control" type="text" th:field="${userForm.surname}">
+                <input class="form-control" id="fsurname" type="text" th:field="${userForm.surname}">
             </label>
             <label class="form-group" style="margin-left: 30px">
                 Отечество<br>
-                <input class="form-control" type="text" th:value="${user.patronymic}" th:field="${userForm.patronymic}">
+                <input class="form-control" id="fpatronymic" type="text" th:field="${userForm.patronymic}">
             </label>
         </div>
         <div>
             <label class="form-group">
                 Телефонный номер
-                <input class="form-control" type="text" th:field="${userForm.phoneNumber}">
+                <input class="form-control" id="fphoneNumber" type="text" th:field="${userForm.phoneNumber}">
             </label>
             <label class="form-group" style="margin-left: 30px">
                 Дата рождения
-                <input class="form-control" type="date" th:field="${userForm.birthday}">
+                <input class="form-control" id="fbirthday" type="date" th:field="${userForm.birthday}">
             </label><br>
         </div>
         <div class="d-flex flex-row justify-content-end">
             <div>
-                <input type="button" class="btn btn-danger" value="Назад">
-                <input type="button" class="btn btn-primary" value="Подтвердить">
+                <input onclick="window.location.replace('/app/MainPage')" type="button" class="btn btn-danger" value="Назад">
+                <input type="submit" class="btn btn-primary" value="Подтвердить">
             </div>
         </div>
-    </div>
+    </form>
+    <h3 th:utext="${error}" class="text-danger"></h3>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-    function setFields() {
 
-    }
 </script>
 </body>
 </html>
