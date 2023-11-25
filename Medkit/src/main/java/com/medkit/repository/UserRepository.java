@@ -1,5 +1,6 @@
 package com.medkit.repository;
 
+import com.medkit.model.Appointment;
 import com.medkit.model.User;
 import com.medkit.model.UserRole;
 import com.medkit.repository.interfaces.OracleRepositoryBase;
@@ -58,8 +59,38 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
     @Override
     public User get(User element) throws SQLException {
-        return null;
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USER(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+            statement.setInt(2, element.getId());
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users.get(0);
     }
+
+    @Override
+    public User getById(int id) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USER(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+            statement.setInt(2, id);
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users.get(0);
+    }
+
 
     @Override
     public List<User> getAll() throws SQLException {
@@ -71,7 +102,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
             statement.execute();
 
-            users = convertResultSet(statement.getObject(1, ResultSet.class));
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
         }
 
         return users;
@@ -90,20 +121,36 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
             statement.execute();
 
-            users = convertResultSet(statement.getObject(1, ResultSet.class));
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
         }
 
         return users.get(0);
     }
 
+    public List<User> getByRole(UserRole role) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USERS_BY_ROLE(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+            statement.setString(2, role.getValue());
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users;
+    }
+
     @Override
-    protected List<User> convertResultSet(ResultSet resultSet) throws SQLException {
+    protected List<User> parseResultSet(ResultSet resultSet) throws SQLException {
         List<User> users = new ArrayList<>();
 
         while (resultSet.next()) {
             int id = resultSet.getInt("user_id");
 
-            UserRole role = UserRole.getRoleByValue(resultSet.getString("user_role"));
+            UserRole role = UserRole.getByValue(resultSet.getString("user_role"));
 
             String name = resultSet.getString("name");
             String surname = resultSet.getString("surname");

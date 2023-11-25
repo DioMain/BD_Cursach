@@ -15,22 +15,15 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 @Slf4j
 @Controller
@@ -165,7 +158,7 @@ public class AuthorizationController {
         newUser.setBirthday(simpleDateFormat.parse(form.getBirthday()));
 
 
-        newUser.setUserRole(UserRole.getRoleByValue(form.getRole()));
+        newUser.setUserRole(UserRole.getByValue(form.getRole()));
         newUser.setPhoneNumber(form.getPhoneNumber());
         newUser.setEmail(form.getEmail());
         newUser.setPassword(form.getPassword());

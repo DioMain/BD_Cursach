@@ -14,5 +14,7 @@ public interface OracleRepository<T> {
 
     T get(T element) throws SQLException;
 
+    T getById(int id) throws SQLException;
+
     List<T> getAll() throws SQLException;
 }

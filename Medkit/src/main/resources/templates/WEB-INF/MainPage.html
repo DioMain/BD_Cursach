@@ -13,15 +13,15 @@
     <div>
         <form class="form-group">
             <div th:if="${user.userRole.getValue()} == PATIENT">
-                <input type="button" class="btn btn-success btn-block" value="Записаться на приём"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
+                <input type="button" onclick="window.location.replace('/app/AppointmentEditor')" class="btn btn-success btn-block" value="Записаться на приём"><br>
+                <input type="button" onclick="window.location.replace('/app/UserAppointmentViewer')" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
                 <input type="button" class="btn btn-primary btn-block" value="Медецинская карта"><br>
             </div>
             <div th:if="${user.userRole.getValue()} == DOCTOR">
                 <input type="button" class="btn btn-success btn-block" value="Создать диагноз"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
+                <input type="button" onclick="window.location.replace('/app/DoctorAppointmentViewer_Actual')" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
                 <input type="button" class="btn btn-primary btn-block" value="Текущие диагнозы"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Все приёмы"><br>
+                <input type="button" onclick="window.location.replace('/app/DoctorAppointmentViewer_All')" class="btn btn-primary btn-block" value="Все приёмы"><br>
                 <input type="button" class="btn btn-primary btn-block" value="Все диагнозы"><br>
             </div>
             <div th:if="${user.userRole.getValue()} == ADMIN">
@@ -32,7 +32,8 @@
             </div>
         </form>
     </div>
-    <div style="margin-left: 25px">
+    <div class="separator"></div>
+    <div style="margin-left: 10px">
         <h4>
             <span th:utext="${user.surname}"></span>
             <span th:utext="${user.name}"></span>
@@ -54,10 +55,10 @@
             <span>ДАТА РОЖДЕНИЯ: </span>
             <span th:utext="${user.birthday}"></span>
         </h5>
-        <form class="btn-group" style="margin-top: 30px">
-            <input onclick="window.location.replace('/app/UserEditor')" type="button" class="btn btn-primary" value="Редактировать"><br>
-            <input type="button" onclick="window.location.replace('/app/DeleteUser')" class="btn btn-danger" value="Удалить"><br>
-            <input type="button" onclick="window.location.replace('/app/Exit')" class="btn btn-danger" value="Выйти"><br>
+        <form style="margin-top: 30px">
+            <input onclick="window.location.replace('/app/UserEditor')" type="button" class="btn btn-primary" value="Редактировать">
+            <input type="button" onclick="deleteUser()" class="btn btn-danger" value="Удалить">
+            <input type="button" onclick="window.location.replace('/app/Exit')" class="btn btn-danger" value="Выйти">
         </form>
     </div>
 </div>
@@ -66,5 +67,23 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function deleteUser() {
+            fetch("/app/DeleteUser", {
+                method: "DELETE",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    window.location.replace('/Login');
+                })
+                .catch(error => {
+                    //window.location.replace('/ErrorPage');
+                    console.log(error);
+                });
+        }
+    </script>
 </body>
 </html>

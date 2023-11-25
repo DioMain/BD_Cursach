@@ -5,12 +5,15 @@ import com.medkit.session.SessionManager;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.sql.SQLException;
+import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class MainPageController {
@@ -43,16 +46,22 @@ public class MainPageController {
         return mav;
     }
 
-    @GetMapping({ "/app/DeleteUser" })
-    public ModelAndView deleteUser(HttpServletRequest request) throws SQLException {
-        ModelAndView mav = new ModelAndView("redirect:/Login");
+    @DeleteMapping({ "/app/DeleteUser" })
+    @Async
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
-        SessionInstance instance = SessionManager.getSession(request.getSession().getId());
+        response.setContentType("text/plain");
+        try {
+            SessionInstance instance = SessionManager.getSession(request.getSession().getId());
 
-        assert instance != null;
+            assert instance != null;
 
-        instance.getUserRepository().delete(instance.getCurrentUser());
+            instance.getUserRepository().delete(instance.getCurrentUser());
 
-        return mav;
+            response.getWriter().write("Ok");
+        }
+        catch (SQLException e) {
+            response.getWriter().write(e.getMessage());
+        }
     }
 }

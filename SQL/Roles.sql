@@ -6,6 +6,8 @@ grant create view, alter any analytic view, alter any materialized view,
     drop any analytic view, drop any materialized view to ADMIN_RL;
 grant create tablespace, drop tablespace to ADMIN_RL;*/
 
+grant RESTRICTED SESSION to ADMIN;
+
 grant execute ON DBMS_CRYPTO TO ADMIN;
 
 CREATE ROLE DOCTOR_RL;

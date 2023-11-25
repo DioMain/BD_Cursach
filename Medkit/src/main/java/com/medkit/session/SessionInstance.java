@@ -1,11 +1,11 @@
 package com.medkit.session;
 
 import com.medkit.exception.UnknownUserRoleException;
-import com.medkit.model.User;
-import com.medkit.model.UserRole;
-import com.medkit.repository.UserRepository;
+import com.medkit.model.*;
+import com.medkit.repository.*;
+import com.medkit.service.OracleMTMConnectionService;
+
 import lombok.Getter;
-import lombok.extern.log4j.Log4j;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.Closeable;
@@ -23,7 +23,14 @@ public class SessionInstance implements Closeable {
 
     private final UserRole connectionRole;
 
+    private final OracleMTMConnectionService MTMConnector;
+
     private final UserRepository userRepository;
+    private final AppointmentRepository appointmentRepository;
+    private final DiagnoseRepository diagnoseRepository;
+    private final DiseaseRepository diseaseRepository;
+    private final MedicineRepository medicineRepository;
+    private final SymptomRepository symptomRepository;
 
     public SessionInstance(UserRole role) throws UnknownUserRoleException, SQLException {
 
@@ -47,7 +54,14 @@ public class SessionInstance implements Closeable {
             default -> throw new UnknownUserRoleException(role);
         }
 
+        MTMConnector = new OracleMTMConnectionService(connection);
+
         userRepository = new UserRepository(connection);
+        appointmentRepository = new AppointmentRepository(connection);
+        diagnoseRepository = new DiagnoseRepository(connection);
+        diseaseRepository = new DiseaseRepository(connection);
+        medicineRepository = new MedicineRepository(connection);
+        symptomRepository = new SymptomRepository(connection);
 
         connectionRole = role;
     }

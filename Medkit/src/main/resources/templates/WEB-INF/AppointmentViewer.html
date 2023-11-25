@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MEDKIT - APPOINTMENT VIEWER</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        .common-block {
+            width: 800px;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .list-block {
+
+        }
+
+        .appointment-element {
+            background-color: #D9D9D9;
+
+            padding: 24px;
+
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="common-block">
+        <h2 th:utext="${title}" style="margin-top: 50px; margin-bottom: 0; text-align: center; font-weight: bold;"></h2>
+        <div class="text-center"><a class="btn btn-link" th:href="@{/app/MainPage}">Назад</a></div>
+        <br>
+        <div class="d-flex flex-column list-block">
+            <div class="appointment-element d-flex flex-column m-3" th:each="appointmentForm : ${appointmentForms}">
+                <div class="d-flex flex-row justify-content-between">
+                    <div>
+                        <div th:utext="'Врач: '+${appointmentForm.doctor.surname}+' '+${appointmentForm.doctor.name}+' '+${appointmentForm.doctor.patronymic}"></div>
+                        <div th:utext="'Пациент: '+${appointmentForm.patient.surname}+' '+${appointmentForm.patient.name}+' '+${appointmentForm.patient.patronymic}"></div>
+                        <div th:utext="'Дата посещения: '+${appointmentForm.appointment.appointmentDate}"></div>
+                    </div>
+                    <div>
+                        <div style="font-size: 18px">
+                            СОСТОЯНИЕ:
+                            <span class="font-weight-bolder font-italic"  th:switch="${appointmentForm.appointment.state.getValue()}">
+                                <span class="text-danger" th:case="-2">ОТМЕНЕНО ВРАЧЁМ</span>
+                                <span class="text-danger" th:case="-1">ОТМЕНЕНО ПАЦИЕНТОМ</span>
+                                <span class="text-warning" th:case="0">НЕ ПОДТВЕРЖДЕНО</span>
+                                <span class="text-primary" th:case="1">ПОДТВЕРЖДЕНО</span>
+                                <span class="text-success" th:case="2">ПОСЕЩЕНО</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${canEdit}" class="d-flex flex-row justify-content-end">
+                    <div th:switch="${userRole}">
+                        <div th:case="'ADMIN'">
+
+                        </div>
+                        <div th:case="'DOCTOR'">
+                            <form th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
+                                <input th:onclick="'cancelAppointment(' + ${appointmentForm.appointment.id} + ', \'DOCTOR\')'" type="button" class="btn btn-danger" value="Отменить">
+                                <input th:onclick="'updateAppointment(' + ${appointmentForm.appointment.id} + ', \'DOCTOR\')'" type="button" class="btn btn-success" value="Обновить">
+                            </form>
+                        </div>
+                        <div th:case="'PATIENT'">
+                            <form th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
+                                <input th:onclick="'cancelAppointment(' + ${appointmentForm.appointment.id} + ', \'PATIENT\')'" type="button" class="btn btn-danger" value="Отменить">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <script>
+        function cancelAppointment(appointmentId, userRole) {
+            fetch("/app/CancelAppointment", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'text/plain' },
+                body: JSON.stringify({ appointmentId: appointmentId, userRole: userRole })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    console.log(data);
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function updateAppointment(appointmentId, userRole) {
+            fetch("/app/UpdateAppointment", {
+                method: "PUT",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ appointmentId: appointmentId, userRole: userRole })
+            })
+                .then(response => response.text())
+                .then(data => {
+                    window.location.reload();
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+    </script>
+
+</body>
+</html>

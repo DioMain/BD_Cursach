@@ -1,6 +1,5 @@
 package com.medkit.repository.interfaces;
 
-import com.medkit.model.User;
 import lombok.Getter;
 
 import java.sql.Connection;
@@ -32,5 +31,5 @@ public abstract class OracleRepositoryBase<T> implements OracleRepository<T>{
     @Override
     public abstract List<T> getAll() throws SQLException;
 
-    protected abstract List<T> convertResultSet(ResultSet resultSet) throws SQLException;
+    protected abstract List<T> parseResultSet(ResultSet resultSet) throws SQLException;
 }

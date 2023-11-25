@@ -1,5 +1,6 @@
 package com.medkit.filter;
 
+import com.medkit.exception.SessionException;
 import com.medkit.model.UserRole;
 import com.medkit.service.JwtService;
 import com.medkit.session.SessionInstance;
@@ -12,13 +13,14 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Slf4j
 public class TokenFilter implements Filter {
 
-    @SneakyThrows
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
+            throws IOException, ServletException {
 
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
@@ -33,11 +35,7 @@ public class TokenFilter implements Filter {
         JwtService jwt = new JwtService();
 
         if (!jwt.validateToken(authKey.getValue())) {
-            authKey.setValue("");
-
-            response.addCookie(authKey);
-
-            log.info("Not valid jwt token!");
+            log.info("Not valid jwt token! FOR: [SID: " + request.getSession().getId() + "]");
 
             response.setCharacterEncoding("UTF-8");
             response.sendRedirect("/Login");
@@ -46,29 +44,49 @@ public class TokenFilter implements Filter {
             String email = jwt.getUserEmailFromToken(authKey.getValue());
             String password = jwt.getUserPasswordFromToken(authKey.getValue());
 
-            SessionInstance instance = SessionManager.getSession(request.getSession().getId());
+            try {
+                SessionInstance instance = SessionManager.getSession(request.getSession().getId());
 
-            assert instance != null;
+                if (instance == null){
+                    SessionManager.getInstance().createSession(UserRole.LOGIN_REGISTRATION, request.getSession().getId());
 
-            if (instance.login(email, password)){
-                SessionManager.getInstance().createSession(instance.getCurrentUser().getUserRole(), request.getSession().getId());
-
-                instance = SessionManager.getSession(request.getSession().getId());
+                    instance = SessionManager.getSession(request.getSession().getId());
+                }
 
                 assert instance != null;
+                if (instance.login(email, password)){
 
-                instance.login(email, password);
+                    UserRole currentRole = instance.getCurrentUser().getUserRole();
+                    String currentEmail = instance.getCurrentUser().getEmail();
 
-                log.info("Create oracle session on [SID: " + request.getSession().getId() +
-                        ", ROLE: " + instance.getCurrentUser().getUserRole() + "];");
+                    if (currentRole != instance.getConnectionRole() || currentEmail.compareTo(email) != 0) {
+                        SessionManager.getInstance().createSession(instance.getCurrentUser().getUserRole(), request.getSession().getId());
 
-                chain.doFilter(request, response);
-            }
-            else {
-                log.info("Login failed!");
+                        instance = SessionManager.getSession(request.getSession().getId());
+
+                        assert instance != null;
+
+                        instance.login(email, password);
+
+                        log.info("Create oracle session on [SID: " + request.getSession().getId() +
+                                ", ROLE: " + instance.getCurrentUser().getUserRole() + "];");
+                    }
+
+                    chain.doFilter(request, response);
+                }
+                else {
+                    log.warn("Login failed!");
+
+                    response.setCharacterEncoding("UTF-8");
+                    response.sendRedirect("/Login");
+                }
+            } catch (SessionException e) {
+                log.error(e.getMessage());
+
+                request.getSession().setAttribute("lastError", e.getMessage());
 
                 response.setCharacterEncoding("UTF-8");
-                response.sendRedirect("/Login");
+                response.sendRedirect("/ErrorPage");
             }
         }
     }
