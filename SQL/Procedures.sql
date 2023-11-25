@@ -215,7 +215,293 @@ DROP FUNCTION GET_ALL_APPOINTMENTS;
 DROP FUNCTION GET_APPOINTMENTS_BY_USERID;
 DROP FUNCTION GET_APPOINTMENT;
 
---
+--Medicines
+
+CREATE OR REPLACE PROCEDURE INSERT_NEW_MEDICINE (
+    name_a nvarchar2,
+    description_a nvarchar2,
+    manufacturer_a nvarchar2,
+    price_a number,
+    start_date_a date
+)
+AS
+BEGIN
+   INSERT INTO ADMIN.MEDICINES (ADMIN.MEDICINES.NAME, ADMIN.MEDICINES.DESCRIPTION, ADMIN.MEDICINES.MANUFACTURER, ADMIN.MEDICINES.PRICE, ADMIN.MEDICINES.START_DATE)
+                VALUES (name_a, description_a, manufacturer_a, price_a, start_date_a);
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE UPDATE_MEDICINE (
+    medicine_id_a int,
+    name_a nvarchar2,
+    description_a nvarchar2,
+    manufacturer_a nvarchar2,
+    price_a number,
+    start_date_a date
+)
+AS
+BEGIN
+   UPDATE ADMIN.MEDICINES
+        SET ADMIN.MEDICINES.NAME = name_a, ADMIN.MEDICINES.DESCRIPTION = description_a,
+            ADMIN.MEDICINES.MANUFACTURER = manufacturer_a, ADMIN.MEDICINES.PRICE = price_a,
+            ADMIN.MEDICINES.START_DATE = start_date_a
+        WHERE ADMIN.MEDICINES.MEDICINE_ID = medicine_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE DELETE_MEDICINE (
+    medicine_id_a int
+)
+AS
+BEGIN
+   DELETE FROM ADMIN.MEDICINES WHERE ADMIN.MEDICINES.MEDICINE_ID = medicine_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE FUNCTION GET_ALL_MEDICINES
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.MEDICINES;
+
+    RETURN v_cursor;
+END;
+
+CREATE OR REPLACE FUNCTION GET_MEDICINE (
+    id_a int
+)
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.MEDICINES WHERE MEDICINE_ID = id_a;
+
+    RETURN v_cursor;
+END;
+
+DROP PROCEDURE INSERT_NEW_MEDICINE;
+DROP PROCEDURE UPDATE_MEDICINE;
+DROP PROCEDURE DELETE_MEDICINE;
+DROP FUNCTION GET_ALL_MEDICINES;
+DROP FUNCTION GET_MEDICINE;
+
+--SYMPTOMS
+
+CREATE OR REPLACE PROCEDURE INSERT_NEW_SYMPTOM (
+    name_a nvarchar2,
+    description_a nvarchar2
+)
+AS
+BEGIN
+   INSERT INTO ADMIN.SYMPTOMS (ADMIN.SYMPTOMS.NAME, ADMIN.SYMPTOMS.DESCRIPTION)
+                VALUES (name_a, description_a);
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE UPDATE_SYMPTOM (
+    symptom_id_a int,
+    name_a nvarchar2,
+    description_a nvarchar2
+)
+AS
+BEGIN
+   UPDATE ADMIN.SYMPTOMS
+        SET ADMIN.SYMPTOMS.NAME = name_a, ADMIN.SYMPTOMS.DESCRIPTION = description_a
+        WHERE ADMIN.SYMPTOMS.SYMPTOM_ID = symptom_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE DELETE_SYMPTOM (
+    symptom_id_a int
+)
+AS
+BEGIN
+   DELETE FROM ADMIN.SYMPTOMS WHERE ADMIN.SYMPTOMS.SYMPTOM_ID = symptom_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE FUNCTION GET_ALL_SYMPTOMS
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.SYMPTOMS;
+
+    RETURN v_cursor;
+END;
+
+CREATE OR REPLACE FUNCTION GET_SYMPTOM (
+    id_a int
+)
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.SYMPTOMS WHERE ADMIN.SYMPTOMS.SYMPTOM_ID = id_a;
+
+    RETURN v_cursor;
+END;
+
+DROP PROCEDURE INSERT_NEW_SYMPTOM;
+DROP PROCEDURE UPDATE_SYMPTOM;
+DROP PROCEDURE DELETE_SYMPTOM;
+DROP FUNCTION GET_ALL_SYMPTOMS;
+DROP FUNCTION GET_SYMPTOM;
+
+--DIAGNOSES
+
+CREATE OR REPLACE PROCEDURE INSERT_NEW_DIAGNOSE (
+    doctor_id_a int,
+    patient_id_a int,
+    disease_id_a int,
+
+    open_date_a date,
+    close_date_a date,
+    note_a nvarchar2,
+    description_a nvarchar2,
+    diagnose_state_a int
+)
+AS
+BEGIN
+   INSERT INTO ADMIN.DIAGNOSES (DOCTOR_ID, PATIENT_ID, DISEASE_ID, OPEN_DATE, CLOSE_DATE, NOTE, DESCRIPTION, DIAGNOSE_STATE)
+                VALUES (doctor_id_a, patient_id_a, disease_id_a, open_date_a, close_date_a, note_a, description_a, diagnose_state_a);
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE UPDATE_DIAGNOSE (
+    diagnose_id_a int,
+    doctor_id_a int,
+    patient_id_a int,
+    disease_id_a int,
+
+    open_date_a date,
+    close_date_a date,
+    note_a nvarchar2,
+    description_a nvarchar2,
+    diagnose_state_a int
+)
+AS
+BEGIN
+   UPDATE ADMIN.DIAGNOSES
+       SET ADMIN.DIAGNOSES.DOCTOR_ID = doctor_id_a, ADMIN.DIAGNOSES.PATIENT_ID = patient_id_a, ADMIN.DIAGNOSES.DISEASE_ID = disease_id_a,
+           ADMIN.DIAGNOSES.OPEN_DATE = open_date_a, ADMIN.DIAGNOSES.CLOSE_DATE = close_date_a, ADMIN.DIAGNOSES.NOTE = note_a,
+           ADMIN.DIAGNOSES.DESCRIPTION = description_a, ADMIN.DIAGNOSES.DIAGNOSE_STATE = diagnose_state_a
+       WHERE ADMIN.DIAGNOSES.DIAGNOSE_ID = diagnose_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE DELETE_DIAGNOSE (
+    diagnose_id_a int
+)
+AS
+BEGIN
+   DELETE FROM ADMIN.DIAGNOSES WHERE ADMIN.DIAGNOSES.DIAGNOSE_ID = diagnose_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE FUNCTION GET_ALL_DIAGNOSES
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DIAGNOSES;
+
+    RETURN v_cursor;
+END;
+
+CREATE OR REPLACE FUNCTION GET_DIAGNOSE (
+    id_a int
+)
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DIAGNOSES WHERE ADMIN.DIAGNOSES.DIAGNOSE_ID = id_a;
+
+    RETURN v_cursor;
+END;
+
+DROP PROCEDURE INSERT_NEW_DIAGNOSE;
+DROP PROCEDURE UPDATE_DIAGNOSE;
+DROP PROCEDURE DELETE_DIAGNOSE;
+DROP FUNCTION GET_ALL_DIAGNOSES;
+DROP FUNCTION GET_DIAGNOSE;
+
+--DISEASE
+
+CREATE OR REPLACE PROCEDURE INSERT_NEW_DISEASE (
+    name_a nvarchar2,
+    description_a nvarchar2
+)
+AS
+BEGIN
+   INSERT INTO ADMIN.DISEASES (ADMIN.DISEASES.NAME, ADMIN.DISEASES.DESCRIPTION)
+                VALUES (name_a, description_a);
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE UPDATE_DISEASE (
+    disease_id_a int,
+    name_a nvarchar2,
+    description_a nvarchar2
+)
+AS
+BEGIN
+   UPDATE ADMIN.DISEASES
+        SET ADMIN.DISEASES.NAME = name_a, ADMIN.DISEASES.DESCRIPTION = description_a
+        WHERE ADMIN.DISEASES.DISEASE_ID = disease_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE PROCEDURE DELETE_DISEASE (
+    disease_id_a int
+)
+AS
+BEGIN
+   DELETE FROM ADMIN.DISEASES WHERE ADMIN.DISEASES.DISEASE_ID = disease_id_a;
+
+   commit;
+END;
+
+CREATE OR REPLACE FUNCTION GET_ALL_DISEASES
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DISEASES;
+
+    RETURN v_cursor;
+END;
+
+CREATE OR REPLACE FUNCTION GET_DISEASE (
+    id_a int
+)
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DISEASES WHERE ADMIN.DISEASES.DISEASE_ID = id_a;
+
+    RETURN v_cursor;
+END;
+
+DROP PROCEDURE INSERT_NEW_DISEASE;
+DROP PROCEDURE UPDATE_DISEASE;
+DROP PROCEDURE DELETE_DISEASE;
+DROP FUNCTION GET_ALL_DISEASES;
+DROP FUNCTION GET_DISEASE;
 
 -- DEBUG
 
@@ -275,3 +561,45 @@ END;
 
 DROP PROCEDURE DEBUG_GET_ALL_USERS;
 DROP PROCEDURE GET_CURRENT_USER_DEBUG;
+
+-- MTM
+
+CREATE OR REPLACE PROCEDURE DIAGNOSES_TO_MEDICINES (
+    diagnose int,
+    medicine int
+)
+AS
+BEGIN
+    INSERT INTO DIAGNOSESTOMEDICINES (DIAGNOSE_ID, MEDICINE_ID)
+                VALUES (diagnose, medicine);
+
+    commit;
+end;
+
+CREATE OR REPLACE PROCEDURE DIAGNOSES_TO_SYMPTOMS (
+    diagnose int,
+    symptom int
+)
+AS
+BEGIN
+    INSERT INTO DIAGNOSESTOSYMPTOMS (DIAGNOSE_ID, SYMPTOM_ID)
+                VALUES (diagnose, symptom);
+
+    commit;
+end;
+
+CREATE OR REPLACE PROCEDURE DISEASES_TO_SYMPTOMS (
+    disease int,
+    symptom int
+)
+AS
+BEGIN
+    INSERT INTO DISEASESTOSYMPTOMS (DISEASE_ID, SYMPTOM_ID)
+                VALUES (disease, symptom);
+
+    commit;
+end;
+
+DROP PROCEDURE DIAGNOSES_TO_MEDICINES;
+DROP PROCEDURE DIAGNOSES_TO_SYMPTOMS;
+DROP PROCEDURE DISEASES_TO_SYMPTOMS;
