@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "SPweIyhOnsIJ0c+hD8DSZ9PBnTk7A1kxOgKqGMRlTQ5OkraxbwwOvYGAsPjSvXHHG8x0kovjeOCZ3bbkhA1YqA==",
+  "success": true,
+  "projectFilePath": "D:\\UnicLabs\\3Cource\\BD_Cursach\\UsersGenerator\\UsersGenerator\\UsersGenerator.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Xyandopovich\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+    "C:\\Users\\Xyandopovich\\.nuget\\packages\\system.text.encodings.web\\8.0.0\\system.text.encodings.web.8.0.0.nupkg.sha512",
+    "C:\\Users\\Xyandopovich\\.nuget\\packages\\system.text.json\\8.0.0\\system.text.json.8.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}

@@ -81,7 +81,7 @@ public class AppointmentController {
             StringBuilder error = new StringBuilder();
 
             bindingResult.getFieldErrors().forEach(i -> {
-                error.append(i.getDefaultMessage()).append('\n');
+                error.append(i.getDefaultMessage()).append("<br>");
             });
 
             mav.getModelMap().addAttribute("appointmentForm", form);
@@ -132,7 +132,6 @@ public class AppointmentController {
         }
 
         mav.getModelMap().addAttribute("appointmentForms", viewForms);
-        mav.getModelMap().addAttribute("title", "Текущие записи");
 
         mav.getModelMap().addAttribute("canEdit", true);
         mav.getModelMap().addAttribute("userRole", patient.getUserRole().getValue());
@@ -163,7 +162,6 @@ public class AppointmentController {
         }
 
         mav.getModelMap().addAttribute("appointmentForms", viewForms);
-        mav.getModelMap().addAttribute("title", "Все записи");
 
         mav.getModelMap().addAttribute("canEdit", false);
         mav.getModelMap().addAttribute("userRole", doctor.getUserRole().getValue());

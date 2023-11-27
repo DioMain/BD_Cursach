@@ -25,10 +25,10 @@
                 <input type="button" class="btn btn-primary btn-block" value="Все диагнозы"><br>
             </div>
             <div th:if="${user.userRole.getValue()} == ADMIN">
-                <input type="button" class="btn btn-primary btn-block" value="Список болезней"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Список симптомов"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Список лекарств"><br>
-                <input type="button" class="btn btn-primary btn-block" value="Список пользователей"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Обазреватель болезней"><br>
+                <input type="button" class="btn btn-primary btn-block" value="Обазреватель симптомов"><br>
+                <input onclick="window.location.replace('/app/AllMedicine')" type="button" class="btn btn-primary btn-block" value="Обазреватель лекарств"><br>
+                <input onclick="window.location.replace('/app/UserViewer?filter=')" type="button" class="btn btn-primary btn-block" value="Обазреватель пользователей"><br>
             </div>
         </form>
     </div>
@@ -62,7 +62,7 @@
         </form>
     </div>
 </div>
-    <h3 th:if="${session.mainPageMessage}" th:utext="${session.mainPageMessage}" ></h3>
+    <h3 th:if="${session.mainPageMessage}" th:utext="${session.mainPageMessage}"></h3>
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

@@ -108,6 +108,59 @@ public class UserRepository extends OracleRepositoryBase<User> {
         return users;
     }
 
+    public List<User> getFirst(int count) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_FIRST_USERS(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.setInt(2, count);
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users;
+    }
+
+    public List<User> getByEmail(String email) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USERS_BY_EMAIL(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.setString(2, email);
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users;
+    }
+
+    public List<User> getByName(String name, String surname, String patronymic) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USERS_BY_NAME(?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.setString(2, name);
+            statement.setString(3, surname);
+            statement.setString(4, patronymic);
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users;
+    }
+
     public User login(String email, String password) throws SQLException {
         List<User> users;
 

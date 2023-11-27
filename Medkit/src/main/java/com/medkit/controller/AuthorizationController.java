@@ -119,7 +119,7 @@ public class AuthorizationController {
             StringBuilder error = new StringBuilder();
 
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                error.append(fieldError.getDefaultMessage()).append("\n");
+                error.append(fieldError.getDefaultMessage()).append("<br>");
             }
 
             mav.getModelMap().addAttribute("error", error);

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MEDKIT - MEDICINE</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+
+
+    <style>
+        .common-block {
+            width: 800px;
+
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .list-block {
+
+        }
+
+        .appointment-element {
+            background-color: #D9D9D9;
+
+            padding: 24px;
+
+            border-radius: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="common-block">
+    <h2 style="margin-top: 50px; text-align: center; font-weight: bold;"> Обазревтель лекарств</h2>
+    <form class="d-flex flex-row justify-content-center">
+        <div style="width: 200px; margin-right: 75px" class="btn-group">
+            <input class="btn btn-success" onclick="window.location.replace('/app/MedicineEditor?id=0')" type="button" value="Добавить лекарсво">
+            <input class="btn btn-danger"  onclick="window.location.replace('/app/MainPage')" type="button" value="Вернуться">
+        </div>
+    </form>
+    <br>
+    <div class="d-flex flex-column list-block">
+        <div class="appointment-element d-flex flex-column m-3" th:each="medcine : ${medicines}">
+            <div class="d-flex flex-row justify-content-between">
+                <h3 th:utext="${medcine.name}"></h3>
+                <h4 th:utext="'Цена: ' + ${medcine.price} + ' BYN'"></h4>
+            </div>
+            <div class="d-flex flex-row justify-content-between">
+                <div>
+                    <p class="p-2" th:utext="${medcine.description}"></p>
+                    <div th:utext="'Производитель: ' + ${medcine.manufacturer} + ' ©'"></div>
+                    <div th:utext="'Начало производства: ' + ${medcine.startDate}"></div>
+                </div>
+
+            </div>
+            <div class="d-flex flex-row justify-content-end">
+                <form>
+                    <input th:onclick="'del(' + ${medcine.id} + ')'" type="button" class="btn btn-danger" value="Удалить">
+                    <input th:onclick="'upd(' + ${medcine.id} + ')'" type="button" class="btn btn-primary" value="Изменить">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function del(id) {
+        fetch("/app/DeleteMedicine", {
+            method: "DELETE",
+            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+            body: JSON.stringify({ id: id })
+        })
+            .then(response => response.text())
+            .then(data => {
+                window.location.reload();
+            })
+            .catch(error => {
+                alert(error);
+            });
+    }
+
+    function upd(id) {
+        window.location.replace(`/app/MedicineEditor?id=${id}`);
+    }
+</script>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,11 +1,17 @@
 package com.medkit.repository;
 
 import com.medkit.model.Diagnose;
+import com.medkit.model.DiagnoseState;
+import com.medkit.model.Symptom;
 import com.medkit.repository.interfaces.OracleRepositoryBase;
+import oracle.jdbc.OracleTypes;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
@@ -15,36 +21,116 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
 
     @Override
     public Diagnose getById(int id) throws SQLException {
-        return null;
+        return get(new Diagnose(id, 0, 0, 0, new Date(), new Date(), "", "", DiagnoseState.OPENED));
     }
 
     @Override
     public void insert(Diagnose element) throws SQLException {
+        String sql = "{call ADMIN.INSERT_NEW_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setInt(1, element.getDoctorId());
+            statement.setInt(2, element.getPatientId());
+            statement.setInt(3, element.getDiseaseId());
 
+            statement.setDate(4, new java.sql.Date(element.getOpenDate().getTime()));
+            statement.setDate(5, new java.sql.Date(element.getCloseDate().getTime()));
+
+            statement.setString(6, element.getNote());
+            statement.setString(7, element.getDescription());
+
+            statement.setInt(8, element.getState().getValue());
+
+            statement.execute();
+        }
     }
 
     @Override
     public void delete(Diagnose element) throws SQLException {
+        String sql = "{call ADMIN.DELETE_DIAGNOSE(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setInt(1, element.getPatientId());
 
+            statement.execute();
+        }
     }
 
     @Override
     public void update(Diagnose element) throws SQLException {
+        String sql = "{call ADMIN.UPDATE_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.setInt(1, element.getId());
+            statement.setInt(2, element.getDoctorId());
+            statement.setInt(3, element.getPatientId());
+            statement.setInt(4, element.getDiseaseId());
 
+            statement.setDate(5, new java.sql.Date(element.getOpenDate().getTime()));
+            statement.setDate(6, new java.sql.Date(element.getCloseDate().getTime()));
+
+            statement.setString(7, element.getNote());
+            statement.setString(8, element.getDescription());
+
+            statement.setInt(9, element.getState().getValue());
+
+            statement.execute();
+        }
     }
 
     @Override
     public Diagnose get(Diagnose element) throws SQLException {
-        return null;
+        List<Diagnose> diagnoses;
+
+        String sql = "{call ? := ADMIN.GET_DIAGNOSE(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+            statement.setInt(2, element.getId());
+
+            statement.execute();
+
+            diagnoses = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return diagnoses.get(0);
     }
 
     @Override
     public List<Diagnose> getAll() throws SQLException {
-        return null;
+        List<Diagnose> diagnoses;
+
+        String sql = "{call ? := ADMIN.GET_ALL_DIAGNOSES()}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.execute();
+
+            diagnoses = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return diagnoses;
     }
 
     @Override
     protected List<Diagnose> parseResultSet(ResultSet resultSet) throws SQLException {
-        return null;
+        List<Diagnose> diagnoses = new ArrayList<>();
+
+        while (resultSet.next()) {
+            int id = resultSet.getInt("user_id");
+
+            int doctorId = resultSet.getInt("doctor_id");
+            int patientId = resultSet.getInt("patient_id");
+            int diseaseId = resultSet.getInt("disease_id");
+
+            Date openDate = resultSet.getDate("open_date");
+            Date closeDate = resultSet.getDate("close_date");
+
+            String note = resultSet.getString("note");
+            String description = resultSet.getString("description");
+
+            DiagnoseState state = DiagnoseState.getByValue(resultSet.getInt("diagnose_state"));
+
+
+            diagnoses.add(new Diagnose(id, doctorId, patientId, diseaseId, openDate, closeDate, note, description, state));
+        }
+
+        return diagnoses;
     }
 }
