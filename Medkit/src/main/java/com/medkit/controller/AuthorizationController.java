@@ -29,24 +29,6 @@ import java.text.SimpleDateFormat;
 @Controller
 public class AuthorizationController {
 
-    @ExceptionHandler(SessionException.class)
-    public ModelAndView sessionException(SessionException exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ModelAndView anyTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
     @GetMapping(value = {"/Login", "/index", "/"})
     public ModelAndView login(HttpServletRequest request, HttpServletResponse response) throws SessionException {
         ModelAndView mav = new ModelAndView();

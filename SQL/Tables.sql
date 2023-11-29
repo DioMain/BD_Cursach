@@ -27,7 +27,7 @@ create table Appointments (
 ) tablespace MEDKIT_TS;
 
 create table Diseases (
-    disease_id int generated always as identity (start with 1 increment by 1),
+    disease_id int,
     primary key (disease_id),
 
     name nvarchar2(64) not null,
@@ -35,7 +35,7 @@ create table Diseases (
 ) tablespace MEDKIT_TS;
 
 create table Diagnoses (
-    diagnose_id int generated always as identity (start with 1 increment by 1),
+    diagnose_id int,
     primary key (diagnose_id),
 
     doctor_id int not null,

@@ -33,6 +33,23 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
         }
     }
 
+    public Disease insertWithReturn(Disease element) throws SQLException {
+        String sql = "{call ? := ADMIN.INSERT_NEW_DISEASE_RET_ID(?, ?)}";
+
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.INTEGER);
+
+            statement.setString(2, element.getName());
+            statement.setString(3, element.getDescription());
+
+            statement.execute();
+
+            element.setId(statement.getObject(1, Integer.class));
+        }
+
+        return element;
+    }
+
     @Override
     public void delete(Disease element) throws SQLException {
         String sql = "{call ADMIN.DELETE_DISEASE(?)}";
@@ -48,8 +65,8 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
         String sql = "{call ADMIN.UPDATE_DISEASE(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
-            statement.setString(1, element.getName());
-            statement.setString(2, element.getDescription());
+            statement.setString(2, element.getName());
+            statement.setString(3, element.getDescription());
 
             statement.execute();
         }
@@ -93,7 +110,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
         List<Disease> diseases = new ArrayList<>();
 
         while (resultSet.next()) {
-            int id = resultSet.getInt("user_id");
+            int id = resultSet.getInt("disease_id");
 
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");

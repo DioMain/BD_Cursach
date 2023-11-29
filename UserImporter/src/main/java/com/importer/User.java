@@ -2,30 +2,35 @@ package com.importer;
 
 
 public class User {
-    public String Name;
-    public String Surname;
-    public String Patronymic;
 
-    public String PhoneNumber;
-    public String Password;
+    public int USER_ID;
 
-    public String Birthday;
-    public String Email;
+    public String USER_ROLE;
 
-    public String Role;
+    public String NAME;
+    public String SURNAME;
+    public String PATRONYMIC;
+
+    public String PHONE_NUMBER;
+    public String PASSWORD;
+
+    public String BIRTHDAY;
+    public String EMAIL;
 
     public User()
     {
-        Name = "";
-        Surname = "";
-        Patronymic = "";
+        USER_ID = 0;
 
-        PhoneNumber = "";
+        NAME = "";
+        SURNAME = "";
+        PATRONYMIC = "";
 
-        Password = "";
+        PHONE_NUMBER = "";
 
-        Birthday = "";
-        Email = "";
-        Role = "";
+        PASSWORD = "";
+
+        BIRTHDAY = "";
+        EMAIL = "";
+        USER_ROLE = "";
     }
 }

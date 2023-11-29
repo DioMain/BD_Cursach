@@ -46,8 +46,8 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
         String sql = "{call ADMIN.UPDATE_SYMPTOM(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
-            statement.setString(1, element.getName());
-            statement.setString(2, element.getDescription());
+            statement.setString(2, element.getName());
+            statement.setString(3, element.getDescription());
 
             statement.execute();
         }
@@ -91,7 +91,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
         List<Symptom> symptoms = new ArrayList<>();
 
         while (resultSet.next()) {
-            int id = resultSet.getInt("user_id");
+            int id = resultSet.getInt("symptom_id");
 
             String name = resultSet.getString("name");
             String description = resultSet.getString("description");

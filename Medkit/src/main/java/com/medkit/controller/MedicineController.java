@@ -27,24 +27,6 @@ import java.util.List;
 @Controller
 public class MedicineController {
 
-    @ExceptionHandler(SessionException.class)
-    public ModelAndView sessionTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ModelAndView anyTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
     @GetMapping({ "/app/AllMedicine" })
     public ModelAndView allMedicine(HttpServletRequest request) throws SQLException {
         ModelAndView mav = new ModelAndView("MedicineViewer");

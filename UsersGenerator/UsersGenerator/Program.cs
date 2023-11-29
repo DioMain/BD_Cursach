@@ -1,4 +1,7 @@
-﻿using System.Text.Json;
+﻿using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Unicode;
+using System.Text.Json;
 
 public class Program
 {
@@ -33,24 +36,23 @@ public class Program
 
             User user = new User()
             {
-                Name = namePool[rand.Next(namePool.Length)],
-                Surname = surnamePool[rand.Next(surnamePool.Length)],
-                Patronymic = patronymicPool[rand.Next(patronymicPool.Length)],
+                USER_ID = i + 100000,
+                NAME = namePool[rand.Next(namePool.Length)],
+                SURNAME = surnamePool[rand.Next(surnamePool.Length)],
+                PATRONYMIC = patronymicPool[rand.Next(patronymicPool.Length)],
 
-                PhoneNumber = phoneNumberPool[rand.Next(phoneNumberPool.Length)],
-                Role = roles[rand.Next(roles.Length)],
+                PHONE_NUMBER = phoneNumberPool[rand.Next(phoneNumberPool.Length)],
+                USER_ROLE = roles[rand.Next(roles.Length)],
 
-                Birthday = date,
+                BIRTHDAY = date,
 
-                Password = "1111",
-                Email = $"someemail.{i}@email.com"
+                PASSWORD = "1111",
+                EMAIL = $"someemail.{i}@email.com"
             };
 
             users.Add(user);
         }
 
-        string result = JsonSerializer.Serialize(users, options);
-
-        File.WriteAllText("../../../../../USERS.json", result);
+        File.WriteAllText("../../../../../IMPORT.json", JsonSerializer.Serialize(users, options));
     }
 }

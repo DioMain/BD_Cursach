@@ -33,15 +33,15 @@
 
 <div class="common-block">
     <h2 style="margin-top: 50px; text-align: center; font-weight: bold;">Обазревтель пользователей</h2>
-    <form class="d-flex flex-row justify-content-center">
-        <div style="width: 300px; margin-right: 75px" class="input-group-append">
+    <div class="d-flex flex-row justify-content-between" style="padding-left: 25px; padding-right: 50px">
+        <div style="width: 310px;" class="input-group-append">
             <input class="form-control" type="text" placeholder="Окулич Дмитрий Юрьевич" id="filterField">
-            <input class="btn btn-primary" type="button" onclick="search()" value="Поиск">
+            <button class="btn btn-primary" type="button" style="margin-left: 10px" onclick="search()">Поиск</button>
         </div>
-        <div style="width: 200px; margin-right: 75px" class="btn-group">
-            <input class="btn btn-danger"  onclick="window.location.replace('/app/MainPage')" type="button" value="Вернуться">
+        <div style="width: 75px;" class="btn-group">
+            <button class="btn btn-danger" onclick="window.location.replace('/app/MainPage')" type="button">Вернуться</button>
         </div>
-    </form>
+    </div>
     <br>
     <div class="d-flex flex-column list-block">
         <div class="appointment-element d-flex flex-column m-3" th:each="user : ${users}">
@@ -57,9 +57,9 @@
             <h5 th:utext="'Телефонный номер: ' + ${user.phoneNumber}"></h5>
             <h5 th:utext="'Дата рождения: ' + ${user.birthday}"></h5>
             <div class="d-flex flex-row justify-content-end">
-                <form th:if="${user.userRole.getValue()} != 'ADMIN'">
-                    <input th:onclick="'del(' + ${user.id} + ')'" type="button" class="btn btn-danger" value="Удалить">
-                </form>
+                <div th:if="${user.userRole.getValue()} != 'ADMIN'">
+                    <button th:onclick="'del(' + ${user.id} + ')'" type="button" class="btn btn-danger">Удалить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -67,7 +67,7 @@
 
 <script>
     function del(id) {
-        fetch("/app/DeleteMedicine", {
+        fetch("/app/DeleteUser_V", {
             method: "DELETE",
             headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
             body: JSON.stringify({ id: id })

@@ -30,23 +30,6 @@ import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class AppointmentController {
-    @ExceptionHandler(SessionException.class)
-    public ModelAndView sessionTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ModelAndView anyTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
 
     @GetMapping({"/app/AppointmentEditor"})
     public ModelAndView appointmentEditor(HttpServletRequest request) throws SQLException {

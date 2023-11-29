@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MEDKIT - SYMPTOM EDITOR</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        .editor-container {
+            margin-top: 150px;
+
+            margin-left: auto;
+            margin-right: auto;
+
+            width: fit-content;
+
+            background: #D9D9D9;
+
+            border-radius: 16px;
+
+            padding: 24px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="editor-container d-flex flex-column">
+    <h2 class="text-center">Редактор симптомов</h2>
+    <form class="d-flex flex-column" th:object="${symptomForm}" th:action="@{/app/SymptomEditor}" method="POST">
+        <input type="number" hidden="hidden" th:field="${symptomForm.id}">
+
+        <label>
+            Название
+            <input class="form-control" type="text" th:field="${symptomForm.name}">
+        </label>
+        <label>
+            Описание
+            <textarea class="form-control" th:field="${symptomForm.description}"></textarea>
+        </label>
+
+        <div class="d-flex flex-row justify-content-center" style="margin-top: 20px">
+            <div class="btn-group" style="width: 250px">
+                <input onclick="window.location.replace('/app/SymptomViewer')" class="btn btn-danger" type="button" value="Назад">
+                <input class="btn btn-primary" type="submit" value="Подтвердить">
+            </div>
+        </div>
+    </form>
+</div>
+<h3 th:utext="${error}" class="text-danger"></h3>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

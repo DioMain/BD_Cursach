@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>MEDKIT - DISEASE EDITOR</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <style>
+        .editor-container {
+            margin-top: 60px;
+
+            margin-left: auto;
+            margin-right: auto;
+
+            width: fit-content;
+
+            background: #D9D9D9;
+
+            border-radius: 16px;
+
+            padding: 24px;
+        }
+
+        .symptom-list {
+            background: #cecece;
+
+            border-radius: 16px;
+
+            padding: 16px;
+        }
+
+        .symptom-element {
+            background: #D9D9D9;
+
+            margin-left: 5px;
+            margin-right: 5px;
+
+            border-radius: 16px;
+
+            padding: 16px;
+        }
+    </style>
+</head>
+<body onload="update()">
+<div style="display: none" id="jsonData" th:json-data="${diseaseForm.symptomsJson}" th:json-symptoms="${symptomsJson}"></div>
+<div class="editor-container d-flex flex-column">
+    <h2 class="text-center">Редактор болезней</h2>
+    <form class="d-flex flex-column" id="diseaseForm" th:object="${diseaseForm}" th:action="@{/app/DiseaseEditor}" method="POST">
+        <input id="d_id" type="number" hidden="hidden" th:field="${diseaseForm.id}">
+
+        <label>
+            Название
+            <input id="d_name" class="form-control" type="text" th:field="${diseaseForm.name}">
+        </label>
+        <label>
+            Описание
+            <textarea id="d_description" class="form-control" th:field="${diseaseForm.description}"></textarea>
+        </label>
+
+        <h4 class="text-center">Симптомы</h4>
+        <div class="d-flex flex-column symptom-list">
+            <div class="d-flex flex-row justify-content-between">
+                <select class="form-control" id="symptomSelect">
+                    <option th:each="symptom : ${symptoms}" th:utext="${symptom.name}" th:value="${symptom.id}"></option>
+                </select>
+                <input style="margin-left: 16px" class="btn btn-primary" type="button" onclick="insertElement()" value="Добавить">
+            </div>
+            <div id="symptomsList" style="margin-top: 20px">
+
+            </div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-center" style="margin-top: 20px">
+            <div class="btn-group" style="width: 250px">
+                <input onclick="window.location.replace('/app/DiseaseViewer')" class="btn btn-danger" type="button" value="Назад">
+                <input class="btn btn-primary" onclick="submitA()" type="button" value="Подтвердить">
+            </div>
+        </div>
+    </form>
+</div>
+<h3 id="error" class="text-danger"></h3>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<script>
+    let symptoms = JSON.parse(document.getElementById("jsonData").getAttribute("json-data"));
+    let allSymptoms = JSON.parse(document.getElementById("jsonData").getAttribute("json-symptoms"));
+
+    console.log(symptoms);
+    console.log(allSymptoms);
+
+    let select = document.getElementById("symptomSelect");
+
+    let list = document.getElementById("symptomsList");
+    let error = document.getElementById("error")
+
+    function update() {
+        list.innerText = "";
+
+        for (let i = 0; i < symptoms.length; i++) {
+            list.innerHTML +=
+                `<div class="symptom-element d-flex flex-row justify-content-between" style="margin-top: 16px">` +
+                    `<h5>${symptoms[i].name}</h5>` +
+                    `<input style="margin-left: 16px" onclick="deleteElement(${i})" type="button" class="btn btn-danger" value="Удалить">` +
+                `</div>`;
+        }
+    }
+
+    function deleteElement(id) {
+        symptoms.splice(id, 1);
+
+        update();
+    }
+
+    function insertElement() {
+        let symptom;
+
+        console.log(select.value);
+
+        allSymptoms.forEach(el => {
+           if (el.id == select.value)
+               symptom = el;
+        });
+
+        symptoms.push({ id: symptom.id, name: symptom.name, description: symptom.description});
+
+        update();
+    }
+
+    function submitA() {
+        fetch("/app/DiseaseEditor", {
+            method: "POST",
+            headers: { 'Content-Type': 'application/json', 'Accept': 'text/plain' },
+            body: JSON.stringify({ id: d_id.value, name: d_name.value, description: d_description.value, symptomsJson: JSON.stringify(symptoms) })
+        })
+            .then(response => response.text())
+            .then(data => {
+                if (data === "ok")
+                    window.location.replace("/app/DiseaseViewer");
+                else
+                    error.innerHTML = data;
+            })
+            .catch(error => {
+                alert(error);
+            });
+    }
+</script>
+</body>
+</html>

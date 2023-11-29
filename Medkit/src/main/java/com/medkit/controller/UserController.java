@@ -1,42 +1,30 @@
 package com.medkit.controller;
 
-import com.medkit.exception.SessionException;
+import com.medkit.forms.IdForm;
 import com.medkit.forms.UserEditorForm;
 import com.medkit.model.User;
+import com.medkit.model.UserRole;
 import com.medkit.session.SessionInstance;
 import com.medkit.session.SessionManager;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
 public class UserController {
-    @ExceptionHandler(SessionException.class)
-    public ModelAndView sessionTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
-
-    @ExceptionHandler(Throwable.class)
-    public ModelAndView anyTrow(Throwable exception, HttpServletRequest request) {
-        ModelAndView modelAndView = new ModelAndView("redirect:/ErrorPage");
-
-        request.getSession().setAttribute("lastError", exception.getMessage());
-
-        return modelAndView;
-    }
 
     @GetMapping({ "/app/UserEditor" })
     public ModelAndView userEditorPage(HttpServletRequest request){
@@ -124,6 +112,21 @@ public class UserController {
         mav.getModelMap().addAttribute("users", users);
 
         return mav;
+    }
+
+    @DeleteMapping({ "/app/DeleteUser_V" })
+    @Async
+    public void deleteUser(HttpServletRequest request, HttpServletResponse response,
+                           @RequestBody IdForm form) throws IOException, SQLException {
+
+        SessionInstance instance = SessionManager.getSession(request.getSession().getId());
+
+        assert instance != null;
+
+        instance.getUserRepository().delete(new User(form.getId(), UserRole.LOGIN_REGISTRATION, "", "", "", "", "", "", new Date()));
+
+        response.setContentType("text/plain");
+        response.getWriter().write("ok");
     }
 
     private static User getUser(UserEditorForm form, SessionInstance instance) throws ParseException {

@@ -58,19 +58,16 @@
 
                 <div th:if="${canEdit}" class="d-flex flex-row justify-content-end">
                     <div th:switch="${userRole}">
-                        <div th:case="'ADMIN'">
-
-                        </div>
                         <div th:case="'DOCTOR'">
-                            <form th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
+                            <div th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
                                 <input th:onclick="'cancelAppointment(' + ${appointmentForm.appointment.id} + ', \'DOCTOR\')'" type="button" class="btn btn-danger" value="Отменить">
                                 <input th:onclick="'updateAppointment(' + ${appointmentForm.appointment.id} + ', \'DOCTOR\')'" type="button" class="btn btn-success" value="Обновить">
-                            </form>
+                            </div>
                         </div>
                         <div th:case="'PATIENT'">
-                            <form th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
+                            <div th:if="${appointmentForm.appointment.state.getValue()} == 0 or ${appointmentForm.appointment.state.getValue()} == 1">
                                 <input th:onclick="'cancelAppointment(' + ${appointmentForm.appointment.id} + ', \'PATIENT\')'" type="button" class="btn btn-danger" value="Отменить">
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>

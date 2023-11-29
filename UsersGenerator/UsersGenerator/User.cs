@@ -6,30 +6,32 @@ using System.Threading.Tasks;
 
 public class User
 {
-    public string Name;
-    public string Surname;
-    public string Patronymic;
+    public int USER_ID;
 
-    public string PhoneNumber;
-    public string Password;
+    public string USER_ROLE;
 
-    public string Birthday;
-    public string Email;
+    public string NAME;
+    public string SURNAME;
+    public string PATRONYMIC;
 
-    public string Role;
+    public string PASSWORD;
+
+    public string BIRTHDAY;
+    public string PHONE_NUMBER;
+    public string EMAIL;
 
     public User()
     {
-        Name = "";
-        Surname = "";
-        Patronymic = "";
+        NAME = "";
+        SURNAME = "";
+        PATRONYMIC = "";
 
-        PhoneNumber = "";
+        PHONE_NUMBER = "";
 
-        Password = "";
+        PASSWORD = "";
 
-        Birthday = "";
-        Email = "";
-        Role = "";
+        BIRTHDAY = "";
+        EMAIL = "";
+        USER_ROLE = "";
     }
 }
