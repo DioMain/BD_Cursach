@@ -31,35 +31,80 @@
 <body>
 
 <div class="common-block">
-    <h2 style="margin-top: 50px; text-align: center; font-weight: bold;" th:utext="${title}"></h2>
+    <h2 style="margin-top: 50px; text-align: center; font-weight: bold;">Обозреватель диагнозов</h2>
     <form class="d-flex flex-row justify-content-center">
-        <div style="width: 200px; margin-right: 75px" class="btn-group">
-            <input class="btn btn-success" onclick="window.location.replace('/app/DiseaseEditor?id=0')" type="button" value="Добавить болезнь">
+        <div style="width: fit-content;" class="btn-group">
             <input class="btn btn-danger"  onclick="window.location.replace('/app/MainPage')" type="button" value="Вернуться">
         </div>
     </form>
     <br>
     <div class="d-flex flex-column list-block">
-        <div class="appointment-element d-flex flex-column m-3" th:each="disease : ${diseases}">
-            <h3 th:utext="${disease.name}"></h3>
-            <p class="p-2" th:utext="${disease.description}"></p>
-            <div class="flex-row d-flex justify-content-start" style="margin-bottom: 25px;">
-                <button data-bs-toggle="collapse" class="btn btn-secondary" data-bs-target="#demo">Симптомы</button>
-            </div>
-            <div id="demo" class="collapse" style="background: #cecece;">
+        <div class="appointment-element d-flex flex-column m-3" th:each="diagnose : ${diagnoses}">
 
+            <h3 th:utext="${diagnose.note}"></h3>
+            <p th:utext="${diagnose.description}"></p>
+
+            <div class="flex-row d-flex justify-content-start" style="margin-bottom: 25px;">
+                <button data-bs-toggle="collapse" class="btn btn-secondary" th:data-bs-target="'#symptom' + ${diagnose.id}">Симптомы</button>
+            </div>
+            <div th:id="'symptom' + ${diagnose.id}" class="collapse" style="background: #cecece;">
                 <div style="padding: 16px">
-                    <div th:each="symptom : ${disease.symptoms}" class="d-flex flex-row justify-content-between">
+                    <div th:each="symptom : ${diagnose.symptoms}" class="d-flex flex-row justify-content-between">
                         <h5 th:utext="${symptom.name}"></h5>
                         <p th:utext="${symptom.description}"></p>
                     </div>
                 </div>
             </div>
+
+            <div class="flex-row d-flex justify-content-start" style="margin-bottom: 25px; margin-top: 25px">
+                <button data-bs-toggle="collapse" class="btn btn-secondary" th:data-bs-target="'#medicine' + ${diagnose.id}">Лекарства</button>
+            </div>
+            <div th:id="'medicine' + ${diagnose.id}" class="collapse" style="background: #cecece;">
+                <div style="padding: 16px">
+                    <div th:each="medicine : ${diagnose.medicines}" class="d-flex flex-row justify-content-between">
+                        <h5 th:utext="${medicine.name}"></h5>
+                        <p th:utext="${medicine.description}"></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex flex-row justify-content-between" style="margin-bottom: 16px; margin-top: 16px">
+                <h5 th:utext="'Дата открытия: ' + ${diagnose.openDate}"></h5>
+                <h5 th:if="${!diagnose.closeDate.isEmpty()}" th:utext="'Дата закрытия: ' + ${diagnose.closeDate}"></h5>
+            </div>
+
+            <div class="d-flex flex-row justify-content-between">
+                <div class="d-flex flex-column" style="width: fit-content; padding: 10px; background: #cecece; border-radius: 6px">
+                    <h3 class="text-center">Пациент</h3>
+                    <h5 th:utext="${diagnose.patient.surname} + ' ' + ${diagnose.patient.name} + ' ' + ${diagnose.patient.patronymic}"></h5>
+                    <h5 th:utext="'Номер: ' + ${diagnose.patient.phoneNumber}"></h5>
+                </div>
+                <div class="d-flex flex-column" style="width: fit-content; padding: 10px; background: #cecece; border-radius: 6px">
+                    <h3 class="text-center">Врач</h3>
+                    <h5 th:utext="${diagnose.doctor.surname} + ' ' + ${diagnose.doctor.name} + ' ' + ${diagnose.doctor.patronymic}"></h5>
+                    <h5 th:utext="'Номер: ' + ${diagnose.doctor.phoneNumber}"></h5>
+                </div>
+            </div>
+
+            <div class="d-flex flex-column" style="margin-top: 16px">
+                <h3>
+                    Диагноз:
+                    <span th:if="${diagnose.state} == 1" th:utext="${diagnose.disease.name}"></span>
+                    <span th:if="${diagnose.state} != 1" th:else class="text-warning font-italic">НЕ ОПРЕДЕЛЁН</span>
+                </h3>
+                <p th:if="${diagnose.state} == 1" th:utext="${diagnose.disease.description}"></p>
+            </div>
+
             <div class="d-flex flex-row justify-content-end" style="margin-top: 25px;">
-                <div>
-                    <input th:onclick="'del(' + ${disease.id} + ')'" type="button" class="btn btn-danger" value="Отменить">
-                    <input th:onclick="'upd(' + ${disease.id} + ')'" type="button" class="btn btn-primary" value="Изменить">
-                    <input th:onclick="'apply(' + ${disease.id} + ')'" type="button" class="btn btn-primary" value="Изменить">
+                <h3 th:switch="${diagnose.state}"> СТАТУС:
+                    <span class="text-primary" th:case="0">ОТКРЫТ</span>
+                    <span class="text-primary" th:case="1">ЗАКРЫТ</span>
+                    <span class="text-danger" th:case="-1">ОТМЕНЁН</span>
+                </h3>
+            </div>
+            <div class="d-flex flex-row justify-content-end" style="margin-top: 25px;">
+                <div th:if="${user.userRole.getValue()} == 'DOCTOR' and ${diagnose.state} == 0">
+                    <input th:onclick="'upd(' + ${diagnose.id} + ')'" type="button" class="btn btn-primary" value="Изменить">
                 </div>
             </div>
         </div>
@@ -67,23 +112,8 @@
 </div>
 
 <script>
-    function del(id) {
-        fetch("/app/DeleteDisease", {
-            method: "DELETE",
-            headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-            body: JSON.stringify({ id: id })
-        })
-            .then(response => response.text())
-            .then(data => {
-                window.location.reload();
-            })
-            .catch(error => {
-                alert(error);
-            });
-    }
-
     function upd(id) {
-        window.location.replace(`/app/DiseaseEditor?id=${id}`);
+        window.location.replace(`/app/DiagnoseEditor?id=${id}`);
     }
 </script>
 

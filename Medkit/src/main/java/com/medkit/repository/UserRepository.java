@@ -161,6 +161,26 @@ public class UserRepository extends OracleRepositoryBase<User> {
         return users;
     }
 
+    public List<User> getByNameAndRole(String name, String surname, String patronymic, UserRole role) throws SQLException {
+        List<User> users;
+
+        String sql = "{call ? := ADMIN.GET_USERS_BY_NAME_AND_ROLE(?, ?, ?, ?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.setString(2, name);
+            statement.setString(3, surname);
+            statement.setString(4, patronymic);
+            statement.setString(5, role.getValue());
+
+            statement.execute();
+
+            users = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return users;
+    }
+
     public User login(String email, String password) throws SQLException {
         List<User> users;
 

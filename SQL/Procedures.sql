@@ -143,10 +143,11 @@ BEGIN
     RETURN v_result;
 end;
 
-CREATE OR REPLACE FUNCTION GET_USERS_BY_NAME (
+CREATE OR REPLACE FUNCTION GET_USERS_BY_NAME_AND_ROLE (
     name_a nvarchar2,
     surname_a nvarchar2,
-    patronymic_a nvarchar2
+    patronymic_a nvarchar2,
+    role_a nvarchar2
 )
 RETURN SYS_REFCURSOR
 IS
@@ -160,7 +161,8 @@ BEGIN
                EMAIL FROM ADMIN.USERS
                      WHERE NAME like '%' || name_a || '%'
                         and SURNAME like '%' || surname_a || '%'
-                        and PATRONYMIC like '%' || patronymic_a || '%';
+                        and PATRONYMIC like '%' || patronymic_a || '%'
+                        and USER_ROLE like role_a;
 
     RETURN v_result;
 end;
@@ -173,7 +175,7 @@ IS
     v_result SYS_REFCURSOR;
 BEGIN
     OPEN v_result FOR
-        SELECT FIRST_VALUE(50) over (), USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
+        SELECT USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
                'HIDDEN' AS PASSWORD,
                BIRTHDAY,
                SUBSTR(PHONE_NUMBER, 0, 7) || '*******' AS PHONE_NUMBER,
@@ -192,6 +194,7 @@ DROP FUNCTION GET_USERS_BY_ROLE;
 DROP FUNCTION GET_USER;
 DROP FUNCTION GET_USERS_BY_EMAIL;
 DROP FUNCTION GET_USERS_BY_NAME;
+DROP FUNCTION GET_USERS_BY_NAME_AND_ROLE;
 DROP FUNCTION GET_FIRST_USERS;
 
 --Appointments
@@ -620,6 +623,18 @@ BEGIN
 END;
 
 CREATE OR REPLACE FUNCTION GET_DISEASE (
+    id_a int
+)
+    RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DISEASES WHERE ADMIN.DISEASES.DISEASE_ID = id_a;
+
+    RETURN v_cursor;
+END;
+
+CREATE OR REPLACE FUNCTION GET_DISEASE_BY_SYMPTOMS (
     id_a int
 )
     RETURN SYS_REFCURSOR

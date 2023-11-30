@@ -22,7 +22,7 @@
             padding: 24px;
         }
 
-        .symptom-list {
+        .c-list {
             background: #cecece;
 
             border-radius: 16px;
@@ -30,7 +30,7 @@
             padding: 16px;
         }
 
-        .symptom-element {
+        .c-element {
             background: #D9D9D9;
 
             margin-left: 5px;
@@ -42,39 +42,82 @@
         }
     </style>
 </head>
-<body onload="update()">
-<div style="display: none" id="jsonData" th:json-data="${diseaseForm.symptomsJson}" th:json-symptoms="${symptomsJson}"></div>
+<body onload="initialize()">
+<div style="display: none" id="jsonData" th:medicines-json="${diagnoseForm.medicinesJSON}" th:symptoms-json="${diagnoseForm.symptomsJSON}"
+     th:doctor-json="${diagnoseForm.doctorJson}" th:patient-json="${diagnoseForm.patientJson}" th:disease-json="${diagnoseForm.diseaseJson}"
+     th:all-medicines-json="${allMedicines}" th:all-symptoms-json="${allSymptoms}"></div>
 <div class="editor-container d-flex flex-column">
-    <h2 class="text-center">Редактор болезней</h2>
-    <form class="d-flex flex-column" id="diseaseForm" th:object="${diseaseForm}" th:action="@{/app/DiseaseEditor}" method="POST">
-        <input id="d_id" type="number" hidden="hidden" th:field="${diseaseForm.id}">
+    <h2 class="text-center">Редактор диагнозов</h2>
+    <form class="d-flex flex-column" id="diseaseForm" th:object="${diagnoseForm}">
+        <input id="d_id" type="number" hidden="hidden" th:field="${diagnoseForm.id}">
 
         <label>
-            Название
-            <input id="d_name" class="form-control" type="text" th:field="${diseaseForm.name}">
+            Заметка
+            <input class="form-control" type="text" th:field="${diagnoseForm.note}" id="note">
         </label>
+
         <label>
             Описание
-            <textarea id="d_description" class="form-control" th:field="${diseaseForm.description}"></textarea>
+            <textarea class="form-control" type="text" th:field="${diagnoseForm.description}" id="desc"></textarea>
         </label>
 
-        <h4 class="text-center">Симптомы</h4>
-        <div class="d-flex flex-column symptom-list">
-            <div class="d-flex flex-row justify-content-between">
-                <select class="form-control" id="symptomSelect">
-                    <option th:each="symptom : ${symptoms}" th:utext="${symptom.name}" th:value="${symptom.id}"></option>
-                </select>
-                <input style="margin-left: 16px" class="btn btn-primary" type="button" onclick="insertElement()" value="Добавить">
-            </div>
-            <div id="symptomsList" style="margin-top: 20px">
+        <div class="d-flex flex-row justify-content-center">
+            <div style="width: fit-content" class="d-flex flex-row">
+                <label>
+                    ФИО Пациента
+                    <input class="form-control" onchange="getPatients()" type="text" id="pat-name">
+                </label>
+                <label style="margin-left: 20px">Пациент
+                    <select class="form-control" id="pat-select">
 
+                    </select>
+                </label>
             </div>
         </div>
 
-        <div class="d-flex flex-row justify-content-center" style="margin-top: 20px">
-            <div class="btn-group" style="width: 250px">
-                <input onclick="window.location.replace('/app/DiseaseViewer')" class="btn btn-danger" type="button" value="Назад">
-                <input class="btn btn-primary" onclick="submitA()" type="button" value="Подтвердить">
+        <div class="d-flex flex-row justify-content-between" style="margin-top: 10px">
+            <div class="c-list">
+                <h4 class="text-center">Симптомы</h4>
+                <div class="d-flex flex-row justify-content-between">
+                    <select class="form-control" id="sym-select">
+                        <option th:each="symptom : ${symptoms}" th:utext="${symptom.name}" th:value="${symptom.id}"></option>
+                    </select>
+                    <input style="margin-left: 16px" class="btn btn-primary" type="button" onclick="insertSymptomElement()" value="Добавить">
+                </div>
+                <div id="sym-list" style="margin-top: 20px">
+
+                </div>
+            </div>
+            <div class="c-list" style="margin-left: 20px">
+                <h4 class="text-center">Лекарства</h4>
+                <div class="d-flex flex-row justify-content-between">
+                    <select class="form-control" id="med-select">
+                        <option th:each="medicine : ${medicines}" th:utext="${medicine.name}" th:value="${medicine.id}"></option>
+                    </select>
+                    <input style="margin-left: 16px" class="btn btn-primary" type="button" onclick="insertMedicineElement()" value="Добавить">
+                </div>
+                <div id="med-list" style="margin-top: 20px">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex flex-row justify-content-end" style="margin-top: 36px">
+            <div class="d-flex flex-column">
+                <div class="d-flex flex-row justify-content-end">
+                    <label style="width: 250px">
+                        Болезнь
+                        <select class="form-control" id="disease-select">
+
+                        </select>
+                    </label>
+                </div>
+                <div class="d-flex flex-row btn-group" style="margin-top: 20px">
+                    <input onclick="window.location.replace('/app/MainPage')" class="btn btn-danger" type="button" value="Назад">
+                    <input onclick="confirm(-1)" class="btn btn-danger" type="button" value="Отменить диагноз">
+                    <input onclick="confirm(0)" class="btn btn-primary" type="button" value="Подтвердить">
+                    <input onclick="confirm(1)" class="btn btn-success" type="button" value="Закрыть диагноз">
+                </div>
             </div>
         </div>
     </form>
@@ -85,68 +128,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-<script>
-    let symptoms = JSON.parse(document.getElementById("jsonData").getAttribute("json-data"));
-    let allSymptoms = JSON.parse(document.getElementById("jsonData").getAttribute("json-symptoms"));
-
-    console.log(symptoms);
-    console.log(allSymptoms);
-
-    let select = document.getElementById("symptomSelect");
-
-    let list = document.getElementById("symptomsList");
-    let error = document.getElementById("error")
-
-    function update() {
-        list.innerText = "";
-
-        for (let i = 0; i < symptoms.length; i++) {
-            list.innerHTML +=
-                `<div class="symptom-element d-flex flex-row justify-content-between" style="margin-top: 16px">` +
-                    `<h5>${symptoms[i].name}</h5>` +
-                    `<input style="margin-left: 16px" onclick="deleteElement(${i})" type="button" class="btn btn-danger" value="Удалить">` +
-                `</div>`;
-        }
-    }
-
-    function deleteElement(id) {
-        symptoms.splice(id, 1);
-
-        update();
-    }
-
-    function insertElement() {
-        let symptom;
-
-        console.log(select.value);
-
-        allSymptoms.forEach(el => {
-           if (el.id == select.value)
-               symptom = el;
-        });
-
-        symptoms.push({ id: symptom.id, name: symptom.name, description: symptom.description});
-
-        update();
-    }
-
-    function submitA() {
-        fetch("/app/DiseaseEditor", {
-            method: "POST",
-            headers: { 'Content-Type': 'application/json', 'Accept': 'text/plain' },
-            body: JSON.stringify({ id: d_id.value, name: d_name.value, description: d_description.value, symptomsJson: JSON.stringify(symptoms) })
-        })
-            .then(response => response.text())
-            .then(data => {
-                if (data === "ok")
-                    window.location.replace("/app/DiseaseViewer");
-                else
-                    error.innerHTML = data;
-            })
-            .catch(error => {
-                alert(error);
-            });
-    }
-</script>
+<script th:src="@{/js/DiagnoseEditor.js}"></script>
 </body>
 </html>

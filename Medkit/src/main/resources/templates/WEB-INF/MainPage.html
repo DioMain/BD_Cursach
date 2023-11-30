@@ -18,7 +18,7 @@
                 <input type="button" onclick="window.location.replace('/app/DiagnoseViewer?filter=0')" class="btn btn-primary btn-block" value="Медецинская карта"><br>
             </div>
             <div th:if="${user.userRole.getValue()} == DOCTOR">
-                <input type="button" class="btn btn-success btn-block" value="Создать диагноз"><br>
+                <input type="button" onclick="window.location.replace('/app/DiagnoseEditor?id=0')" class="btn btn-success btn-block" value="Создать диагноз"><br>
                 <input type="button" onclick="window.location.replace('/app/DoctorAppointmentViewer_Actual')" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
                 <input type="button" onclick="window.location.replace('/app/DiagnoseViewer?filter=1')" class="btn btn-primary btn-block" value="Текущие диагнозы"><br>
                 <input type="button" onclick="window.location.replace('/app/DoctorAppointmentViewer_All')" class="btn btn-primary btn-block" value="Все приёмы"><br>

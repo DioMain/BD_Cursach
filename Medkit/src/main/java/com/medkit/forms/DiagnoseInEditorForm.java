@@ -17,10 +17,10 @@ public class DiagnoseInEditorForm {
     private String note;
     private String description;
 
-    private Disease disease;
+    private String diseaseJson;
 
-    private User patient;
-    private User doctor;
+    private String patientJson;
+    private String doctorJson;
 
     private int state;
 

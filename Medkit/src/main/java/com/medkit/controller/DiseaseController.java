@@ -114,8 +114,6 @@ public class DiseaseController {
         else {
             ObjectMapper mapper = new ObjectMapper();
 
-            instance.getMTMConnector().deleteDiseaseToSymptomByDisease(form.getId());
-
             List<Symptom> symptoms = mapper.readValue(form.getSymptomsJson() , new TypeReference<List<Symptom>>() { });
 
             Disease disease = new Disease();
@@ -128,6 +126,8 @@ public class DiseaseController {
                 instance.getDiseaseRepository().update(disease);
             else
                 disease = instance.getDiseaseRepository().insertWithReturn(disease);
+
+            instance.getMTMConnector().deleteDiseaseToSymptomByDisease(form.getId());
 
             for (Symptom item : symptoms) {
                 instance.getMTMConnector().diseaseToSymptom(disease, item);

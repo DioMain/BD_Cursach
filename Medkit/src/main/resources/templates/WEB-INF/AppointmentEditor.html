@@ -23,16 +23,14 @@
         }
     </style>
 </head>
-<body>
+<body onload="onChange()">
 
     <div class="editor-container d-flex flex-column">
         <h2>Запись на приём</h2>
         <form th:object="${appointmentForm}" th:action="@{/app/AppointmentEditor_post}" method="POST">
-            <label for="doc-select">Врач</label><br>
-            <select class="form-select w-100" id="doc-select" th:field="${appointmentForm.doctorId}">
-                <option th:each="doctor : ${doctors}" th:value="${doctor.id}"
-                        th:utext="${doctor.surname}+' '+${doctor.name}+' '+${doctor.patronymic}">
-                </option>
+            <label for="doc-name">Врач</label><br>
+            <input onchange="onChange()" style="margin-bottom: 10px" class="form-control" id="doc-name" type="text">
+            <select class="form-control w-100" id="doc-select" th:field="${appointmentForm.doctorId}">
             </select><br><br>
 
             <label for="date-input">Дата приёма</label><br>
@@ -49,5 +47,35 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script>
+        let docSelect = document.getElementById("doc-select");
+        let docName = document.getElementById("doc-name");
+
+        let doctors = [];
+
+        function onChange() {
+            fetch("/app/AppointmentGetDoctors", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify({ value: docName.value })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    doctors = data;
+
+                    updateSelect();
+                })
+                .catch(error => {
+                    alert(error);
+                });
+        }
+
+        function updateSelect() {
+            docSelect.innerHTML = "";
+            for (let i = 0; i < doctors.length; i++) {
+                docSelect.innerHTML += `<option value="${doctors[i].id}">${doctors[i].surname} ${doctors[i].name}  ${doctors[i].patronymic}</option>`;
+            }
+        }
+    </script>
 </body>
 </html>

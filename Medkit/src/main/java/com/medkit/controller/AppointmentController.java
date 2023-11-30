@@ -1,6 +1,7 @@
 package com.medkit.controller;
 
-import com.medkit.exception.SessionException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.medkit.forms.StringFrom;
 import com.medkit.forms.AppointmentForm;
 import com.medkit.forms.AppointmentUpdateForm;
 import com.medkit.forms.AppointmentViewForm;
@@ -24,9 +25,8 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
 
 @Controller
 public class AppointmentController {
@@ -69,7 +69,7 @@ public class AppointmentController {
 
             mav.getModelMap().addAttribute("appointmentForm", form);
             mav.getModelMap().addAttribute("error", error);
-            mav.getModelMap().addAttribute("doctors", instance.getUserRepository().getByRole(UserRole.DOCTOR));
+
 
             mav.setViewName("AppointmentEditor");
         }
@@ -237,6 +237,43 @@ public class AppointmentController {
             instance.getAppointmentRepository().update(appointment);
 
             response.getWriter().write("Ok");
+        }
+        catch (SQLException e) {
+            response.getWriter().write(e.getMessage());
+        }
+    }
+
+    @PostMapping({ "/app/AppointmentGetDoctors" })
+    @Async
+    public void getUsersAppointment(HttpServletRequest request, HttpServletResponse response,
+                                  @RequestBody StringFrom form) throws IOException {
+
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            SessionInstance instance = SessionManager.getSession(request.getSession().getId());
+
+            assert instance != null;
+
+            List<User> users;
+
+            String[] arr = form.getValue().split(" ", 3);;
+
+            if (form.getValue().isEmpty())
+                users = instance.getUserRepository().getFirst(100);
+            else if (Arrays.stream(arr).count() == 1)
+                users = instance.getUserRepository().getByName("", arr[0], "");
+            else if (Arrays.stream(arr).count() == 2)
+                users = instance.getUserRepository().getByName(arr[1], arr[0], "");
+            else
+                users = instance.getUserRepository().getByName(arr[1], arr[0], arr[2]);
+
+            users = users.stream().limit(300).toList();
+
+            response.getWriter().write(mapper.writeValueAsString(users));
         }
         catch (SQLException e) {
             response.getWriter().write(e.getMessage());

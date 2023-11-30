@@ -45,9 +45,9 @@
             <h3 th:utext="${disease.name}"></h3>
             <p class="p-2" th:utext="${disease.description}"></p>
             <div class="flex-row d-flex justify-content-start" style="margin-bottom: 25px;">
-                <button data-bs-toggle="collapse" class="btn btn-secondary" data-bs-target="#demo">Симптомы</button>
+                <button data-bs-toggle="collapse" class="btn btn-secondary" th:data-bs-target="'#symptoms' + ${disease.id}">Симптомы</button>
             </div>
-            <div id="demo" class="collapse" style="background: #cecece;">
+            <div th:id="'symptoms' + ${disease.id}" class="collapse" style="background: #cecece;">
 
                 <div style="padding: 16px">
                     <div th:each="symptom : ${disease.symptoms}" class="d-flex flex-row justify-content-between">

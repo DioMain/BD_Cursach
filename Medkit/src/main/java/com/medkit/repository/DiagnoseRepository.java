@@ -54,7 +54,11 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
             statement.setInt(4, element.getDiseaseId());
 
             statement.setDate(5, new java.sql.Date(element.getOpenDate().getTime()));
-            statement.setDate(6, new java.sql.Date(element.getCloseDate().getTime()));
+
+            if (element.getCloseDate() != null)
+                statement.setDate(6, new java.sql.Date(element.getCloseDate().getTime()));
+            else
+                statement.setDate(6, null);
 
             statement.setString(7, element.getNote());
             statement.setString(8, element.getDescription());
@@ -89,7 +93,11 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
             statement.setInt(4, element.getDiseaseId());
 
             statement.setDate(5, new java.sql.Date(element.getOpenDate().getTime()));
-            statement.setDate(6, new java.sql.Date(element.getCloseDate().getTime()));
+
+            if (element.getCloseDate() != null)
+                statement.setDate(6, new java.sql.Date(element.getCloseDate().getTime()));
+            else
+                statement.setDate(6, null);
 
             statement.setString(7, element.getNote());
             statement.setString(8, element.getDescription());
