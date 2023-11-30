@@ -251,7 +251,6 @@ public class DiagnoseController {
                     diagnose = instance.getDiagnoseRepository().getById(form.getId());
                 else {
                     diagnose.setOpenDate(new Date());
-                    diagnose.setDoctorId(instance.getCurrentUser().getId());
                 }
 
                 if (form.getState() != 0)
@@ -261,7 +260,7 @@ public class DiagnoseController {
                 diagnose.setDescription(form.getDescription());
                 diagnose.setState(DiagnoseState.getByValue(form.getState()));
 
-                diagnose.setPatientId(form.getDoctorId());
+                diagnose.setDoctorId(instance.getCurrentUser().getId());
                 diagnose.setPatientId(form.getPatientId());
 
                 diagnose.setDiseaseId(form.getDiseaseId());

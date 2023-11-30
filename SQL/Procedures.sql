@@ -13,9 +13,10 @@ CREATE OR REPLACE PROCEDURE REGISTRATION_NEW_USER(
 AS
     v_encrypted_raw raw(128);
 BEGIN
-    v_encrypted_raw := dbms_crypto.hash(
-            utl_i18n.string_to_raw( CONCAT(password_a, 'MEDKIT'), 'AL32UTF8'),
-            dbms_crypto.HASH_SH256
+    v_encrypted_raw := dbms_crypto.ENCRYPT(
+            utl_i18n.string_to_raw( password_a, 'AL32UTF8'),
+            DBMS_CRYPTO.ENCRYPT_RC4,
+            utl_i18n.string_to_raw( 'MEDKIT')
           );
 
     INSERT INTO ADMIN.USERS (USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY, PHONE_NUMBER, EMAIL)
@@ -48,10 +49,11 @@ IS
     v_encrypted raw(128);
     v_result SYS_REFCURSOR;
 BEGIN
-    v_encrypted := dbms_crypto.hash(
-        utl_i18n.string_to_raw( CONCAT(a_password, 'MEDKIT'), 'AL32UTF8'),
-        dbms_crypto.HASH_SH256
-        );
+    v_encrypted := dbms_crypto.ENCRYPT(
+            utl_i18n.string_to_raw( a_password, 'AL32UTF8'),
+            DBMS_CRYPTO.ENCRYPT_RC4,
+            utl_i18n.string_to_raw( 'MEDKIT')
+          );
 
     OPEN v_result FOR
         select USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
@@ -668,7 +670,7 @@ AS
     user_email nvarchar2(64);
     user_cursor SYS_REFCURSOR;
 BEGIN
-    user_cursor := GET_CURRENT_USER('dima123.zample@gmail.com', 'ADMINN');
+    user_cursor := GET_CURRENT_USER('dima1234.zample@gmail.com', 'ADMIN');
 
     LOOP
         FETCH user_cursor INTO user_id, user_role, user_name, user_surname, user_patronymic, user_password, user_birthday, user_phonenumber, user_email;

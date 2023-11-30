@@ -17,8 +17,8 @@ public class DiagnoseViewForm {
     private String openDate;
     private String closeDate;
 
-    private String note;
     private String description;
+    private String note;
 
     private Disease disease;
 

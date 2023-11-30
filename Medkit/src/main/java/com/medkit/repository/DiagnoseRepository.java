@@ -177,7 +177,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
             DiagnoseState state = DiagnoseState.getByValue(resultSet.getInt("diagnose_state"));
 
 
-            diagnoses.add(new Diagnose(id, doctorId, patientId, diseaseId, openDate, closeDate, note, description, state));
+            diagnoses.add(new Diagnose(id, patientId, doctorId, diseaseId, openDate, closeDate, note, description, state));
         }
 
         return diagnoses;

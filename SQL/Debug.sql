@@ -4,7 +4,7 @@ values ('ADMIN', 'Dima', 'Okylich', 'Iur`evich', 'pravoda01', '16.04.2004', '+80
 CALL ADMIN.REGISTRATION_NEW_USER('ADMIN', 'ADMIN',
                                   'ADMIN_SUR', 'ADMIN_PAT',
                                  'ADMIN', '16.04.2004',
-                                    '+375297080318', 'dima1234.zample@gmail.com');
+                                    '+375297080318', 'dima123.zample@gmail.com');
 
 CALL ADMIN.INSERT_NEW_DISEASE('Альц ГЕЙМЕР', '');
 CALL ADMIN.INSERT_NEW_DISEASE('Альц ГЕЙМЕР 1', '');
@@ -23,7 +23,7 @@ CALL ADMIN.DISEASES_TO_SYMPTOMS(2, 4);
 CALL ADMIN.DISEASES_TO_SYMPTOMS(3, 3);
 CALL ADMIN.DISEASES_TO_SYMPTOMS(3, 4);
 
-DELETE FROM ADMIN.USERS where EMAIL like '%dima%';
+DELETE FROM ADMIN.USERS;
 
 DELETE FROM ADMIN.DISEASESTOSYMPTOMS where ID = 7;
 

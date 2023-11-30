@@ -263,7 +263,7 @@ public class AppointmentController {
             String[] arr = form.getValue().split(" ", 3);;
 
             if (form.getValue().isEmpty())
-                users = instance.getUserRepository().getFirst(100);
+                users = instance.getUserRepository().getByRole(UserRole.DOCTOR).stream().limit(300).toList();
             else if (Arrays.stream(arr).count() == 1)
                 users = instance.getUserRepository().getByName("", arr[0], "");
             else if (Arrays.stream(arr).count() == 2)
