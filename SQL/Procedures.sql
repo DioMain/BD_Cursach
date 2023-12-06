@@ -14,9 +14,9 @@ AS
     v_encrypted_raw raw(128);
 BEGIN
     v_encrypted_raw := dbms_crypto.ENCRYPT(
-            utl_i18n.string_to_raw( password_a, 'AL32UTF8'),
+            utl_i18n.string_to_raw(password_a, 'AL32UTF8'),
             DBMS_CRYPTO.ENCRYPT_RC4,
-            utl_i18n.string_to_raw( 'MEDKIT')
+            utl_i18n.string_to_raw('MEDKIT')
           );
 
     INSERT INTO ADMIN.USERS (USER_ROLE, NAME, SURNAME, PATRONYMIC, PASSWORD, BIRTHDAY, PHONE_NUMBER, EMAIL)

@@ -75,6 +75,10 @@ public class MedicineController {
 
         ModelAndView mav = new ModelAndView("redirect:/app/AllMedicine");
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = simpleDateFormat.parse(form.getStartDate());
+
         if (bindingResult.hasErrors()) {
             StringBuilder error = new StringBuilder();
 
@@ -87,15 +91,19 @@ public class MedicineController {
             mav.getModelMap().addAttribute("medicineForm", form);
             mav.getModelMap().addAttribute("error", error);
         }
+        else if (date.after(new Date())){
+            mav.setViewName("MedicineEditor");
+
+            mav.getModelMap().addAttribute("medicineForm", form);
+            mav.getModelMap().addAttribute("error", "Не верная дата!");
+        }
         else {
             SessionInstance instance = SessionManager.getSession(request.getSession().getId());
 
             assert instance != null;
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
             Medicine medicine = new Medicine(form.getId(), form.getName(), form.getDescription(),
-                                             form.getManufacturer(), form.getPrice(), simpleDateFormat.parse(form.getStartDate()));
+                                             form.getManufacturer(), form.getPrice(), date);
 
             if (medicine.getId() > 0)
                 instance.getMedicineRepository().update(medicine);

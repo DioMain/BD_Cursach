@@ -62,6 +62,10 @@ public class UserController {
 
         assert instance != null;
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = simpleDateFormat.parse(form.getBirthday());
+
         if (validationResult.hasErrors()) {
             StringBuilder errors = new StringBuilder();
 
@@ -70,6 +74,11 @@ public class UserController {
             });
 
             mav.getModelMap().addAttribute("error", errors);
+
+            mav.setViewName("UserEditor");
+        }
+        else if (date.after(new Date())) {
+            mav.getModelMap().addAttribute("error", "Не верная дата!");
 
             mav.setViewName("UserEditor");
         }

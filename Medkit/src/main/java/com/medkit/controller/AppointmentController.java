@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -78,15 +79,25 @@ public class AppointmentController {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-            appointment.setAppointmentDate(simpleDateFormat.parse(form.getAppointmentDate()));
+            Date date = simpleDateFormat.parse(form.getAppointmentDate());
 
-            appointment.setState(AppointmentState.NOT_CONSISTENT);
-            appointment.setDoctorId(form.getDoctorId());
-            appointment.setPatientId(instance.getCurrentUser().getId());
+            if (date.before(new Date())) {
+                mav.getModelMap().addAttribute("appointmentForm", form);
+                mav.getModelMap().addAttribute("error", "Не верная дата");
 
-            instance.getAppointmentRepository().insert(appointment);
+                mav.setViewName("AppointmentEditor");
+            }
+            else {
+                appointment.setAppointmentDate(date);
 
-            mav.setViewName("redirect:/app/MainPage");
+                appointment.setState(AppointmentState.NOT_CONSISTENT);
+                appointment.setDoctorId(form.getDoctorId());
+                appointment.setPatientId(instance.getCurrentUser().getId());
+
+                instance.getAppointmentRepository().insert(appointment);
+
+                mav.setViewName("redirect:/app/MainPage");
+            }
         }
 
         return mav;
@@ -265,11 +276,11 @@ public class AppointmentController {
             if (form.getValue().isEmpty())
                 users = instance.getUserRepository().getByRole(UserRole.DOCTOR).stream().limit(300).toList();
             else if (Arrays.stream(arr).count() == 1)
-                users = instance.getUserRepository().getByName("", arr[0], "");
+                users = instance.getUserRepository().getByNameAndRole("", arr[0], "", UserRole.DOCTOR);
             else if (Arrays.stream(arr).count() == 2)
-                users = instance.getUserRepository().getByName(arr[1], arr[0], "");
+                users = instance.getUserRepository().getByNameAndRole(arr[1], arr[0], "", UserRole.DOCTOR);
             else
-                users = instance.getUserRepository().getByName(arr[1], arr[0], arr[2]);
+                users = instance.getUserRepository().getByNameAndRole(arr[1], arr[0], arr[2], UserRole.DOCTOR);
 
             users = users.stream().limit(300).toList();
 
