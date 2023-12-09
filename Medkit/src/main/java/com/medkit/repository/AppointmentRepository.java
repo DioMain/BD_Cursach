@@ -17,7 +17,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
 
     @Override
     public void insert(Appointment element) throws SQLException {
-        String sql = "{call ADMIN.INSERT_NEW_APPOINTMENT(?, ?, ?)}";
+        String sql = "{call ADMIN.APPOINTMENT_PACK.INSERT_NEW_APPOINTMENT(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getPatientId());
             statement.setInt(2, element.getDoctorId());
@@ -29,7 +29,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
 
     @Override
     public void delete(Appointment element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_APPOINTMENT(?)}";
+        String sql = "{call ADMIN.APPOINTMENT_PACK.DELETE_APPOINTMENT(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getPatientId());
 
@@ -39,7 +39,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
 
     @Override
     public void update(Appointment element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_APPOINTMENT(?, ?)}";
+        String sql = "{call ADMIN.APPOINTMENT_PACK.UPDATE_APPOINTMENT(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
             statement.setInt(2, element.getState().getValue());
@@ -52,7 +52,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
     public Appointment get(Appointment element) throws SQLException {
         List<Appointment> appointments;
 
-        String sql = "{call ? := ADMIN.GET_APPOINTMENT(?)}";
+        String sql = "{call ? := ADMIN.APPOINTMENT_PACK.GET_APPOINTMENT(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -69,7 +69,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
     public Appointment getById(int id) throws SQLException {
         List<Appointment> appointments;
 
-        String sql = "{call ? := ADMIN.GET_APPOINTMENT(?)}";
+        String sql = "{call ? := ADMIN.APPOINTMENT_PACK.GET_APPOINTMENT(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, id);
@@ -85,7 +85,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
     public List<Appointment> getByUserId(int userId) throws SQLException {
         List<Appointment> appointments;
 
-        String sql = "{call ? := ADMIN.GET_APPOINTMENTS_BY_USERID(?)}";
+        String sql = "{call ? := ADMIN.APPOINTMENT_PACK.GET_APPOINTMENTS_BY_USERID(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, userId);
@@ -102,7 +102,7 @@ public class AppointmentRepository extends OracleRepositoryBase<Appointment> {
     public List<Appointment> getAll() throws SQLException {
         List<Appointment> appointments;
 
-        String sql = "{call ? := ADMIN.GET_ALL_APPOINTMENTS()}";
+        String sql = "{call ? := ADMIN.APPOINTMENT_PACK.GET_ALL_APPOINTMENTS()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

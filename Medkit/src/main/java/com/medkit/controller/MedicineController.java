@@ -75,10 +75,6 @@ public class MedicineController {
 
         ModelAndView mav = new ModelAndView("redirect:/app/AllMedicine");
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = simpleDateFormat.parse(form.getStartDate());
-
         if (bindingResult.hasErrors()) {
             StringBuilder error = new StringBuilder();
 
@@ -90,8 +86,15 @@ public class MedicineController {
 
             mav.getModelMap().addAttribute("medicineForm", form);
             mav.getModelMap().addAttribute("error", error);
+
+            return mav;
         }
-        else if (date.after(new Date())){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = simpleDateFormat.parse(form.getStartDate());
+
+        if (date.after(new Date())){
             mav.setViewName("MedicineEditor");
 
             mav.getModelMap().addAttribute("medicineForm", form);

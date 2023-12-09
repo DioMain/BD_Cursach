@@ -16,7 +16,7 @@ public class OracleMTMConnectionService {
     private Connection connection;
 
     public void diagnoseToMedicine(Diagnose diagnose, Medicine medicine) throws SQLException {
-        String sql = "{call ADMIN.DIAGNOSES_TO_MEDICINES(?, ?)}";
+        String sql = "{call ADMIN.MTM_PACK.DIAGNOSES_TO_MEDICINES(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, diagnose.getId());
             statement.setInt(2, medicine.getId());
@@ -26,7 +26,7 @@ public class OracleMTMConnectionService {
     }
 
     public void diagnoseToSymptom(Diagnose diagnose, Symptom symptom)  throws SQLException {
-        String sql = "{call ADMIN.DIAGNOSES_TO_SYMPTOMS(?, ?)}";
+        String sql = "{call ADMIN.MTM_PACK.DIAGNOSES_TO_SYMPTOMS(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, diagnose.getId());
             statement.setInt(2, symptom.getId());
@@ -36,7 +36,7 @@ public class OracleMTMConnectionService {
     }
 
     public void diseaseToSymptom(Disease disease, Symptom symptom)  throws SQLException {
-        String sql = "{call ADMIN.DISEASES_TO_SYMPTOMS(?, ?)}";
+        String sql = "{call ADMIN.MTM_PACK.DISEASES_TO_SYMPTOMS(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, disease.getId());
             statement.setInt(2, symptom.getId());
@@ -48,7 +48,7 @@ public class OracleMTMConnectionService {
     public List<DiseaseToSymptom> getDiseaseToSymptomByDisease(int diseaseId) throws SQLException {
         List<DiseaseToSymptom> list = new ArrayList<>();
 
-        String sql = "{call ? := ADMIN.GET_DISEASESTOSYMPTOMS_BY_DISEASE(?)}";
+        String sql = "{call ? := ADMIN.MTM_PACK.GET_DISEASESTOSYMPTOMS_BY_DISEASE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, diseaseId);
@@ -64,7 +64,7 @@ public class OracleMTMConnectionService {
     public List<DiagnoseToSymptom> getDiagnoseToSymptomByDiagnose(int diagnoseId) throws SQLException {
         List<DiagnoseToSymptom> list = new ArrayList<>();
 
-        String sql = "{call ? := ADMIN.GET_DIAGNOSESTOSYMPTOMS_BY_DIAGNOSE(?)}";
+        String sql = "{call ? := ADMIN.MTM_PACK.GET_DIAGNOSESTOSYMPTOMS_BY_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, diagnoseId);
@@ -80,7 +80,7 @@ public class OracleMTMConnectionService {
     public List<DiagnoseToMedicine> getDiagnoseToMedicineByDiagnose(int diagnoseId) throws SQLException {
         List<DiagnoseToMedicine> list = new ArrayList<>();
 
-        String sql = "{call ? := ADMIN.GET_DIAGNOSESTOMEDICINES_BY_DIAGNOSE(?)}";
+        String sql = "{call ? := ADMIN.MTM_PACK.GET_DIAGNOSESTOMEDICINES_BY_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, diagnoseId);
@@ -94,7 +94,7 @@ public class OracleMTMConnectionService {
     }
 
     public void deleteDiagnoseToSymptomByDiagnose(int diagnoseId) throws SQLException {
-        String sql = "{call ADMIN.DELETE_DIAGNOSESTOSYMPTOMS_BY_DIAGNOSE(?)}";
+        String sql = "{call ADMIN.MTM_PACK.DELETE_DIAGNOSESTOSYMPTOMS_BY_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, diagnoseId);
 
@@ -103,7 +103,7 @@ public class OracleMTMConnectionService {
     }
 
     public void deleteDiagnoseToMedicineByDiagnose(int diagnoseId) throws SQLException {
-        String sql = "{call ADMIN.DELETE_DIAGNOSESTOMEDICINES_BY_DIAGNOSE(?)}";
+        String sql = "{call ADMIN.MTM_PACK.DELETE_DIAGNOSESTOMEDICINES_BY_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, diagnoseId);
 
@@ -112,7 +112,7 @@ public class OracleMTMConnectionService {
     }
 
     public void deleteDiseaseToSymptomByDisease(int diseaseId) throws SQLException {
-        String sql = "{call ADMIN.DELETE_DISEASESTOSYMPTOMS_BY_DISEASE(?)}";
+        String sql = "{call ADMIN.MTM_PACK.DELETE_DISEASESTOSYMPTOMS_BY_DISEASE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, diseaseId);
 

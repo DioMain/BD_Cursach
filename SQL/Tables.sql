@@ -106,7 +106,8 @@ create table DiseasesToSymptoms (
     foreign key (symptom_id) references Symptoms(symptom_id)
 ) tablespace MEDKIT_TS;
 
--- ДЛЯ ОТЛАДКИ (БУДЕТ УДАЛЕНА НА РЕЛИЗЕ)
+-- СЛУЖЕБНЫЕ ТАБЛИЦЫ
+
 create table DEBUG_LOG (
     id int generated always as identity (start with 1 increment by 1),
     primary key (id),
@@ -118,16 +119,16 @@ create table DEBUG_LOG (
 
 commit;
 
-DROP TABLE DiseasesToSymptoms;
-DROP TABLE DiagnosesToMedicines;
-DROP TABLE DiagnosesToSymptoms;
-DROP TABLE Medicines;
-DROP TABLE Symptoms;
-DROP TABLE Diagnoses;
-DROP TABLE Diseases;
-DROP TABLE Appointments;
-DROP TABLE Users;
+DROP TABLE DiseasesToSymptoms PURGE;
+DROP TABLE DiagnosesToMedicines PURGE;
+DROP TABLE DiagnosesToSymptoms PURGE;
+DROP TABLE Medicines PURGE;
+DROP TABLE Symptoms PURGE;
+DROP TABLE Diagnoses PURGE;
+DROP TABLE Diseases PURGE;
+DROP TABLE Appointments PURGE;
+DROP TABLE Users PURGE;
 
-DROP TABLE DEBUG_LOG;
+DROP TABLE DEBUG_LOG PURGE;
 
 commit;

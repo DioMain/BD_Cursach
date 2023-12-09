@@ -17,7 +17,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
     @Override
     public void insert(User element) throws SQLException {
-        String sql = "{call ADMIN.REGISTRATION_NEW_USER(?, ?, ?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.USER_PACK.REGISTRATION_NEW_USER(?, ?, ?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setString(1, element.getUserRole().getValue());
             statement.setString(2, element.getName());
@@ -34,7 +34,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
     @Override
     public void delete(User element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_CURRENT_USER(?)}";
+        String sql = "{call ADMIN.USER_PACK.DELETE_CURRENT_USER(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
 
@@ -44,7 +44,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
 
     @Override
     public void update(User element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_CURRENT_USER(?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.USER_PACK.UPDATE_CURRENT_USER(?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
             statement.setString(2, element.getName());
@@ -61,7 +61,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public User get(User element) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USER(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USER(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -78,7 +78,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public User getById(int id) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USER(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USER(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, id);
@@ -96,7 +96,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getAll() throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_ALL_USERS()}"; // Пример вызова функции с курсором
+        String sql = "{call ? := ADMIN.USER_PACK.GET_ALL_USERS()}"; // Пример вызова функции с курсором
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR); // Регистрация выходного параметра курсора
 
@@ -111,7 +111,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getFirst(int count) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_FIRST_USERS(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_FIRST_USERS(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 
@@ -128,7 +128,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getByEmail(String email) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USERS_BY_EMAIL(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USERS_BY_EMAIL(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 
@@ -145,7 +145,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getByName(String name, String surname, String patronymic) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USERS_BY_NAME(?, ?, ?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USERS_BY_NAME(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 
@@ -164,7 +164,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getByNameAndRole(String name, String surname, String patronymic, UserRole role) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USERS_BY_NAME_AND_ROLE(?, ?, ?, ?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USERS_BY_NAME_AND_ROLE(?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 
@@ -184,7 +184,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public User login(String email, String password) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_CURRENT_USER(?, ?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_CURRENT_USER(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 
@@ -203,7 +203,7 @@ public class UserRepository extends OracleRepositoryBase<User> {
     public List<User> getByRole(UserRole role) throws SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.GET_USERS_BY_ROLE(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USERS_BY_ROLE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setString(2, role.getValue());

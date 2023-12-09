@@ -169,6 +169,28 @@ BEGIN
     RETURN v_result;
 end;
 
+CREATE OR REPLACE FUNCTION GET_USERS_BY_NAME (
+    name_a nvarchar2,
+    surname_a nvarchar2,
+    patronymic_a nvarchar2
+)
+RETURN SYS_REFCURSOR
+IS
+    v_result SYS_REFCURSOR;
+BEGIN
+    OPEN v_result FOR
+        SELECT USER_ID, USER_ROLE, NAME, SURNAME, PATRONYMIC,
+               'HIDDEN' AS PASSWORD,
+               BIRTHDAY,
+               SUBSTR(PHONE_NUMBER, 0, 7) || '*******' AS PHONE_NUMBER,
+               EMAIL FROM ADMIN.USERS
+                     WHERE NAME like '%' || name_a || '%'
+                        and SURNAME like '%' || surname_a || '%'
+                        and PATRONYMIC like '%' || patronymic_a || '%';
+
+    RETURN v_result;
+end;
+
 CREATE OR REPLACE FUNCTION GET_FIRST_USERS (
     count_a int
 )

@@ -22,7 +22,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
 
     @Override
     public void insert(Symptom element) throws SQLException {
-        String sql = "{call ADMIN.INSERT_NEW_SYMPTOM(?, ?)}";
+        String sql = "{call ADMIN.SYMPTOM_PACK.INSERT_NEW_SYMPTOM(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setString(1, element.getName());
             statement.setString(2, element.getDescription());
@@ -33,7 +33,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
 
     @Override
     public void delete(Symptom element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_SYMPTOM(?)}";
+        String sql = "{call ADMIN.SYMPTOM_PACK.DELETE_SYMPTOM(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
 
@@ -43,7 +43,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
 
     @Override
     public void update(Symptom element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_SYMPTOM(?, ?, ?)}";
+        String sql = "{call ADMIN.SYMPTOM_PACK.UPDATE_SYMPTOM(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
             statement.setString(2, element.getName());
@@ -57,7 +57,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
     public Symptom get(Symptom element) throws SQLException {
         List<Symptom> symptoms;
 
-        String sql = "{call ? := ADMIN.GET_SYMPTOM(?)}";
+        String sql = "{call ? := ADMIN.SYMPTOM_PACK.GET_SYMPTOM(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -74,7 +74,7 @@ public class SymptomRepository extends OracleRepositoryBase<Symptom> {
     public List<Symptom> getAll() throws SQLException {
         List<Symptom> symptoms;
 
-        String sql = "{call ? := ADMIN.GET_ALL_SYMPTOMS()}";
+        String sql = "{call ? := ADMIN.SYMPTOM_PACK.GET_ALL_SYMPTOMS()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

@@ -98,10 +98,6 @@ public class AuthorizationController {
 
         ModelAndView mav = new ModelAndView("Registration");
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-        Date date = simpleDateFormat.parse(form.getBirthday());
-
         if (bindingResult.hasErrors()){
             StringBuilder error = new StringBuilder();
 
@@ -110,8 +106,15 @@ public class AuthorizationController {
             }
 
             mav.getModelMap().addAttribute("error", error);
+
+            return mav;
         }
-        else if (form.getPassword().compareTo(form.getConfirmPassword()) != 0){
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Date date = simpleDateFormat.parse(form.getBirthday());
+
+        if (form.getPassword().compareTo(form.getConfirmPassword()) != 0){
             mav.getModelMap().addAttribute("error", "Пароли не совпадают!");
         }
         else if (date.after(new Date())) {

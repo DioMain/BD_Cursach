@@ -26,7 +26,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
 
     @Override
     public void insert(Diagnose element) throws SQLException {
-        String sql = "{call ADMIN.INSERT_NEW_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.DIAGNOSE_PACK.INSERT_NEW_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getDoctorId());
             statement.setInt(2, element.getPatientId());
@@ -45,7 +45,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
     }
 
     public Diagnose insertWithReturn(Diagnose element) throws SQLException {
-        String sql = "{call ? := ADMIN.INSERT_NEW_DIAGNOSE_RET_ID(?, ?, ?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ? := ADMIN.DIAGNOSE_PACK.INSERT_NEW_DIAGNOSE_RET_ID(?, ?, ?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.INTEGER);
 
@@ -75,7 +75,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
 
     @Override
     public void delete(Diagnose element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_DIAGNOSE(?)}";
+        String sql = "{call ADMIN.DIAGNOSE_PACK.DELETE_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getPatientId());
 
@@ -85,7 +85,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
 
     @Override
     public void update(Diagnose element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.DIAGNOSE_PACK.UPDATE_DIAGNOSE(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
             statement.setInt(2, element.getDoctorId());
@@ -112,7 +112,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
     public Diagnose get(Diagnose element) throws SQLException {
         List<Diagnose> diagnoses;
 
-        String sql = "{call ? := ADMIN.GET_DIAGNOSE(?)}";
+        String sql = "{call ? := ADMIN.DIAGNOSE_PACK.GET_DIAGNOSE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -128,7 +128,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
     public List<Diagnose> getByUser(int userId) throws SQLException {
         List<Diagnose> diagnoses;
 
-        String sql = "{call ? := ADMIN.GET_DIAGNOSE_BY_USER(?)}";
+        String sql = "{call ? := ADMIN.DIAGNOSE_PACK.GET_DIAGNOSE_BY_USER(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, userId);
@@ -145,7 +145,7 @@ public class DiagnoseRepository extends OracleRepositoryBase<Diagnose> {
     public List<Diagnose> getAll() throws SQLException {
         List<Diagnose> diagnoses;
 
-        String sql = "{call ? := ADMIN.GET_ALL_DIAGNOSES()}";
+        String sql = "{call ? := ADMIN.DIAGNOSE_PACK.GET_ALL_DIAGNOSES()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

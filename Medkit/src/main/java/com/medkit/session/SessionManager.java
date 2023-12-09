@@ -53,6 +53,10 @@ public class SessionManager {
 
     public void createSession(UserRole role, String httpSessionId) throws SessionException {
         try {
+            if (sessionInstances.get(httpSessionId) != null) {
+                sessionInstances.get(httpSessionId).close();
+            }
+
             sessionInstances.put(httpSessionId, new SessionInstance(role));
         } catch (SQLException sqlException) {
             throw new SessionException("Error on session creation [" + httpSessionId + "], SQL: " + sqlException.getMessage());

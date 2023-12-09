@@ -28,7 +28,7 @@ public class MedicineRepository extends OracleRepositoryBase<Medicine> {
 
     @Override
     public void insert(Medicine element) throws SQLException {
-        String sql = "{call ADMIN.INSERT_NEW_MEDICINE(?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.MEDICINE_PACK.INSERT_NEW_MEDICINE(?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setString(1, element.getName());
             statement.setString(2, element.getDescription());
@@ -44,7 +44,7 @@ public class MedicineRepository extends OracleRepositoryBase<Medicine> {
 
     @Override
     public void delete(Medicine element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_MEDICINE(?)}";
+        String sql = "{call ADMIN.MEDICINE_PACK.DELETE_MEDICINE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
 
@@ -54,7 +54,7 @@ public class MedicineRepository extends OracleRepositoryBase<Medicine> {
 
     @Override
     public void update(Medicine element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_MEDICINE(?, ?, ?, ?, ?, ?)}";
+        String sql = "{call ADMIN.MEDICINE_PACK.UPDATE_MEDICINE(?, ?, ?, ?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
 
@@ -74,7 +74,7 @@ public class MedicineRepository extends OracleRepositoryBase<Medicine> {
     public Medicine get(Medicine element) throws SQLException {
         List<Medicine> medicines;
 
-        String sql = "{call ? := ADMIN.GET_MEDICINE(?)}";
+        String sql = "{call ? := ADMIN.MEDICINE_PACK.GET_MEDICINE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -91,7 +91,7 @@ public class MedicineRepository extends OracleRepositoryBase<Medicine> {
     public List<Medicine> getAll() throws SQLException {
         List<Medicine> medicines;
 
-        String sql = "{call ? := ADMIN.GET_ALL_MEDICINES()}";
+        String sql = "{call ? := ADMIN.MEDICINE_PACK.GET_ALL_MEDICINES()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

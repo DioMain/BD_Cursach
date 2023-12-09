@@ -24,7 +24,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
 
     @Override
     public void insert(Disease element) throws SQLException {
-        String sql = "{call ADMIN.INSERT_NEW_DISEASE(?, ?)}";
+        String sql = "{call ADMIN.DISEASE_PACK.INSERT_NEW_DISEASE(?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setString(1, element.getName());
             statement.setString(2, element.getDescription());
@@ -34,7 +34,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
     }
 
     public Disease insertWithReturn(Disease element) throws SQLException {
-        String sql = "{call ? := ADMIN.INSERT_NEW_DISEASE_RET_ID(?, ?)}";
+        String sql = "{call ? := ADMIN.DISEASE_PACK.INSERT_NEW_DISEASE_RET_ID(?, ?)}";
 
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.INTEGER);
@@ -52,7 +52,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
 
     @Override
     public void delete(Disease element) throws SQLException {
-        String sql = "{call ADMIN.DELETE_DISEASE(?)}";
+        String sql = "{call ADMIN.DISEASE_PACK.DELETE_DISEASE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
 
@@ -62,7 +62,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
 
     @Override
     public void update(Disease element) throws SQLException {
-        String sql = "{call ADMIN.UPDATE_DISEASE(?, ?, ?)}";
+        String sql = "{call ADMIN.DISEASE_PACK.UPDATE_DISEASE(?, ?, ?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.setInt(1, element.getId());
             statement.setString(2, element.getName());
@@ -76,7 +76,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
     public Disease get(Disease element) throws SQLException {
         List<Disease> diseases;
 
-        String sql = "{call ? := ADMIN.GET_DISEASE(?)}";
+        String sql = "{call ? := ADMIN.DISEASE_PACK.GET_DISEASE(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
             statement.setInt(2, element.getId());
@@ -93,7 +93,7 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
     public List<Disease> getAll() throws SQLException {
         List<Disease> diseases;
 
-        String sql = "{call ? := ADMIN.GET_ALL_DISEASES()}";
+        String sql = "{call ? := ADMIN.DISEASE_PACK.GET_ALL_DISEASES()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

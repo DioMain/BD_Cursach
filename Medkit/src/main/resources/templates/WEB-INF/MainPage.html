@@ -14,7 +14,7 @@
         <form class="form-group">
             <div th:if="${user.userRole.getValue()} == PATIENT">
                 <input type="button" onclick="window.location.replace('/app/AppointmentEditor')" class="btn btn-success btn-block" value="Записаться на приём"><br>
-                <input type="button" onclick="window.location.replace('/app/UserAppointmentViewer')" class="btn btn-primary btn-block" value="Текущие приёмы"><br>
+                <input type="button" onclick="window.location.replace('/app/UserAppointmentViewer')" class="btn btn-primary btn-block" value="Все приёмы"><br>
                 <input type="button" onclick="window.location.replace('/app/DiagnoseViewer?filter=0')" class="btn btn-primary btn-block" value="Медецинская карта"><br>
             </div>
             <div th:if="${user.userRole.getValue()} == DOCTOR">
