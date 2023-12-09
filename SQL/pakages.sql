@@ -34,7 +34,7 @@ FUNCTION GET_USER (
     id_a int
 )
 RETURN SYS_REFCURSOR;
-FUNCTION GET_USERS_BY_EMAIL (
+FUNCTION GET_USER_BY_EMAIL (
     email_a nvarchar2
 )
 RETURN SYS_REFCURSOR;
@@ -186,7 +186,7 @@ BEGIN
     RETURN v_result;
 end;
 
-FUNCTION GET_USERS_BY_EMAIL (
+FUNCTION GET_USER_BY_EMAIL (
     email_a nvarchar2
 )
 RETURN SYS_REFCURSOR
@@ -566,53 +566,53 @@ END SYMPTOM_PACK;
 DROP PACKAGE SYMPTOM_PACK;
 
 CREATE OR REPLACE PACKAGE DIAGNOSE_PACK AS
-PROCEDURE INSERT_NEW_DIAGNOSE (
-    doctor_id_a int,
-    patient_id_a int,
-    disease_id_a int,
+    PROCEDURE INSERT_NEW_DIAGNOSE (
+        doctor_id_a int,
+        patient_id_a int,
+        disease_id_a int,
 
-    open_date_a date,
-    close_date_a date,
-    note_a nvarchar2,
-    description_a nvarchar2,
-    diagnose_state_a int
-);
-FUNCTION INSERT_NEW_DIAGNOSE_RET_ID (
-    doctor_id_a int,
-    patient_id_a int,
-    disease_id_a int,
+        open_date_a date,
+        close_date_a date,
+        note_a nvarchar2,
+        description_a nvarchar2,
+        diagnose_state_a int
+    );
+    FUNCTION INSERT_NEW_DIAGNOSE_RET_ID (
+        doctor_id_a int,
+        patient_id_a int,
+        disease_id_a int,
 
-    open_date_a date,
-    close_date_a date,
-    note_a nvarchar2,
-    description_a nvarchar2,
-    diagnose_state_a int
-)
-    RETURN INT;
-PROCEDURE UPDATE_DIAGNOSE (
-    diagnose_id_a int,
-    doctor_id_a int,
-    patient_id_a int,
-    disease_id_a int,
+        open_date_a date,
+        close_date_a date,
+        note_a nvarchar2,
+        description_a nvarchar2,
+        diagnose_state_a int
+    )
+        RETURN INT;
+    PROCEDURE UPDATE_DIAGNOSE (
+        diagnose_id_a int,
+        doctor_id_a int,
+        patient_id_a int,
+        disease_id_a int,
 
-    open_date_a date,
-    close_date_a date,
-    note_a nvarchar2,
-    description_a nvarchar2,
-    diagnose_state_a int
-);
-PROCEDURE DELETE_DIAGNOSE (
-    diagnose_id_a int
-);
-FUNCTION GET_ALL_DIAGNOSES RETURN SYS_REFCURSOR;
-FUNCTION GET_DIAGNOSE (
-    id_a int
-)
-    RETURN SYS_REFCURSOR;
-FUNCTION GET_DIAGNOSE_BY_USER (
-    user_a int
-)
-    RETURN SYS_REFCURSOR;
+        open_date_a date,
+        close_date_a date,
+        note_a nvarchar2,
+        description_a nvarchar2,
+        diagnose_state_a int
+    );
+    PROCEDURE DELETE_DIAGNOSE (
+        diagnose_id_a int
+    );
+    FUNCTION GET_ALL_DIAGNOSES RETURN SYS_REFCURSOR;
+    FUNCTION GET_DIAGNOSE (
+        id_a int
+    )
+        RETURN SYS_REFCURSOR;
+    FUNCTION GET_DIAGNOSE_BY_USER (
+        user_a int
+    )
+        RETURN SYS_REFCURSOR;
 END DIAGNOSE_PACK;
 
 CREATE OR REPLACE PACKAGE BODY DIAGNOSE_PACK AS
@@ -755,10 +755,6 @@ FUNCTION GET_DISEASE (
     id_a int
 )
     RETURN SYS_REFCURSOR;
-FUNCTION GET_DISEASE_BY_SYMPTOMS (
-    id_a int
-)
-    RETURN SYS_REFCURSOR;
 END DISEASE_PACK;
 
 CREATE OR REPLACE PACKAGE BODY DISEASE_PACK AS
@@ -827,18 +823,6 @@ BEGIN
 END;
 
 FUNCTION GET_DISEASE (
-    id_a int
-)
-    RETURN SYS_REFCURSOR
-IS
-    v_cursor SYS_REFCURSOR;
-BEGIN
-    OPEN v_cursor FOR SELECT * FROM ADMIN.DISEASES WHERE ADMIN.DISEASES.DISEASE_ID = id_a;
-
-    RETURN v_cursor;
-END;
-
-FUNCTION GET_DISEASE_BY_SYMPTOMS (
     id_a int
 )
     RETURN SYS_REFCURSOR

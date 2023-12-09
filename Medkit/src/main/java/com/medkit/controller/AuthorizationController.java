@@ -133,7 +133,12 @@ public class AuthorizationController {
                 mav.getModelMap().addAttribute("registrationSuccess", true);
             }
             catch (SQLException sqlException) {
-                mav.getModelMap().addAttribute("error", sqlException.getMessage());
+                if (sqlException.getMessage().startsWith("ORA-00001:")) {
+                    mav.getModelMap().addAttribute("error", "Пользователь с такой почтой уже существует!");
+                }
+                else {
+                    mav.getModelMap().addAttribute("error", sqlException.getMessage());
+                }
             }
         }
 

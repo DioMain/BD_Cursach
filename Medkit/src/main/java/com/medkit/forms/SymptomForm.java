@@ -13,6 +13,6 @@ public class SymptomForm {
 
     @NotEmpty
     private String name;
-    @NotEmpty
+
     private String description;
 }
