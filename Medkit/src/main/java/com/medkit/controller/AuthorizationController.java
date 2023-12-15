@@ -130,15 +130,10 @@ public class AuthorizationController {
             try {
                 instance.getUserRepository().insert(newUser);
 
-                mav.getModelMap().addAttribute("registrationSuccess", true);
+                mav.setViewName("redirect:/Login");
             }
-            catch (SQLException sqlException) {
-                if (sqlException.getMessage().startsWith("ORA-00001:")) {
-                    mav.getModelMap().addAttribute("error", "Пользователь с такой почтой уже существует!");
-                }
-                else {
-                    mav.getModelMap().addAttribute("error", sqlException.getMessage());
-                }
+            catch (SQLException err){
+                mav.getModelMap().addAttribute("error", "Пользователь с такой почтой уже существует!");
             }
         }
 

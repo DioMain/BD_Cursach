@@ -239,6 +239,12 @@ public class DiagnoseController {
 
             response.getWriter().write(error.toString());
         }
+        else if (form.getPatientId() == 0) {
+            response.getWriter().write("Пациент должен быть указан!");
+        }
+        else if (form.getDiseaseId() == 0) {
+            response.getWriter().write("Болезнь должена быть указана!");
+        }
         else {
             try {
                 SessionInstance instance = SessionManager.getSession(request.getSession().getId());
@@ -269,6 +275,9 @@ public class DiagnoseController {
                     instance.getDiagnoseRepository().update(diagnose);
                 else
                     diagnose = instance.getDiagnoseRepository().insertWithReturn(diagnose);
+
+                if (diagnose.getId() == 0)
+                    throw new SQLException("Не удалось создать или обновить диагноз!");
 
                 instance.getMTMConnector().deleteDiagnoseToSymptomByDiagnose(diagnose.getId());
                 instance.getMTMConnector().deleteDiagnoseToMedicineByDiagnose(diagnose.getId());

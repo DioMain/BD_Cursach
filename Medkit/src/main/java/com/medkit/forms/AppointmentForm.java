@@ -17,7 +17,7 @@ public class AppointmentForm {
     private int patientId;
 
     @NotNull
-    @NotEmpty
+    @NotEmpty(message = "Дата не должна быть пустой!")
     private String appointmentDate;
 
     @NotNull

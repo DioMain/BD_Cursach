@@ -14,9 +14,9 @@ import java.util.List;
 public class DiseaseEditorForm {
     private int id;
 
-    @NotEmpty
+    @NotEmpty(message = "Поле названия пустое!")
     private String name;
-    @NotEmpty
+    @NotEmpty(message = "Поле описания пустое!")
     private String description;
 
     private String symptomsJson;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class SymptomForm {
     private int id;
 
-    @NotEmpty
+    @NotEmpty(message = "Поле названия пустое!")
     private String name;
 
     private String description;

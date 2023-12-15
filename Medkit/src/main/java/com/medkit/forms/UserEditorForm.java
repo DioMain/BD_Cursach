@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Data
 public class UserEditorForm {
-    @NotEmpty
+    @NotEmpty(message = "Поле имени пустое!")
     String name;
-    @NotEmpty
+    @NotEmpty(message = "Поле фамилии пустое!")
     String surname;
-    @NotEmpty
+    @NotEmpty(message = "Поле отчетсва пустое!")
     String patronymic;
 
     @NotEmpty
-    @NotNull
+    @NotNull(message = "Поле даты рождения пустое!")
     String birthday;
 
     @Pattern(regexp = "^\\+\\d{12}$", message = "Не верный формат телефона!")

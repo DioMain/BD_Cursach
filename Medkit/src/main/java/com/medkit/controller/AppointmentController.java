@@ -74,6 +74,13 @@ public class AppointmentController {
 
             mav.setViewName("AppointmentEditor");
         }
+        else if (form.getDoctorId() == 0) {
+            mav.getModelMap().addAttribute("appointmentForm", form);
+            mav.getModelMap().addAttribute("error", "Поле врача пустое!");
+
+
+            mav.setViewName("AppointmentEditor");
+        }
         else {
             Appointment appointment = new Appointment();
 
@@ -274,7 +281,7 @@ public class AppointmentController {
             String[] arr = form.getValue().split(" ", 3);;
 
             if (form.getValue().isEmpty())
-                users = instance.getUserRepository().getByRole(UserRole.DOCTOR).stream().limit(300).toList();
+                users = new ArrayList<>();
             else if (Arrays.stream(arr).count() == 1)
                 users = instance.getUserRepository().getByNameAndRole("", arr[0], "", UserRole.DOCTOR);
             else if (Arrays.stream(arr).count() == 2)

@@ -125,10 +125,10 @@ public class UserRepository extends OracleRepositoryBase<User> {
         return users;
     }
 
-    public List<User> getByEmail(String email) throws SQLException {
+    public List<User> getByEmail(String email) throws    SQLException {
         List<User> users;
 
-        String sql = "{call ? := ADMIN.USER_PACK.GET_USERS_BY_EMAIL(?)}";
+        String sql = "{call ? := ADMIN.USER_PACK.GET_USER_BY_EMAIL(?)}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
 

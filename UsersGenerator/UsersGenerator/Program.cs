@@ -46,7 +46,7 @@ public class Program
 
                 BIRTHDAY = date,
 
-                PASSWORD = "1111",
+                PASSWORD = "9E9A41F6",  
                 EMAIL = $"someemail.{i}@email.com"
             };
 

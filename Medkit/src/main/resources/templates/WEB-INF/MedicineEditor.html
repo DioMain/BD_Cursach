@@ -46,7 +46,7 @@
         <div class="d-flex flex-row justify-content-between">
             <label>
                 Цена
-                <input class="form-control" step="0.0001" type="number" style="width: 125px" th:field="${medicineForm.price}">
+                <input class="form-control" step="0.0001" min="0" type="number" style="width: 125px" th:field="${medicineForm.price}">
             </label>
             <label>
                 Начало производства

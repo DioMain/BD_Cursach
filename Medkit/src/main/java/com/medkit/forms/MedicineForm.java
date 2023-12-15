@@ -13,18 +13,19 @@ import org.hibernate.validator.constraints.Length;
 public class MedicineForm {
     private int id;
 
-    @NotEmpty
+    @NotEmpty(message = "Поле названия пустое!")
     @Length(max = 64)
     private String name;
     @Length(max = 512)
     private String description;
     @Length(max = 64)
+    @NotEmpty(message = "Поле производителя пустое!")
     private String manufacturer;
 
     @NotNull
     private float price;
 
-    @NotEmpty
+    @NotEmpty(message = "Поле даты пустое!")
     @NotNull
     private String startDate;
 }
