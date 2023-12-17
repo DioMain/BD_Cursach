@@ -71,8 +71,6 @@ public class SessionInstance implements Closeable {
             currentUser = userRepository.login(email, password);
         }
         catch (Exception exception) {
-            log.error(exception.getMessage());
-
             return false;
         }
 

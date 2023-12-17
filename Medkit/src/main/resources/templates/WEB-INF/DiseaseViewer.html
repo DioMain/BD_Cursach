@@ -50,7 +50,7 @@
             <div th:id="'symptoms' + ${disease.id}" class="collapse" style="background: #cecece;">
 
                 <div style="padding: 16px">
-                    <div th:each="symptom : ${disease.symptoms}" class="d-flex flex-row justify-content-between">
+                    <div th:each="symptom : ${disease.symptoms}" class="d-flex flex-column justify-content-between">
                         <h5 th:utext="${symptom.name}"></h5>
                         <p th:utext="${symptom.description}"></p>
                     </div>

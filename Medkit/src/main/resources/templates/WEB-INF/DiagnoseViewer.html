@@ -49,7 +49,7 @@
             </div>
             <div th:id="'symptom' + ${diagnose.id}" class="collapse" style="background: #cecece;">
                 <div style="padding: 16px">
-                    <div th:each="symptom : ${diagnose.symptoms}" class="d-flex flex-row justify-content-between">
+                    <div th:each="symptom : ${diagnose.symptoms}" class="d-flex flex-column justify-content-between">
                         <h5 th:utext="${symptom.name}"></h5>
                         <p th:utext="${symptom.description}"></p>
                     </div>
@@ -68,7 +68,7 @@
                             </div>
                             <p th:utext="${medicine.description}"></p>
                         </div>
-                        <div class="d-flex flex-column justify-content-between">
+                        <div class="d-flex flex-column justify-content-between" style="min-width: fit-content">
                             <h4 th:utext="${medicine.price} + ' BYN'"></h4>
                             <h5 th:utext="${medicine.startDate}"></h5>
                         </div>
