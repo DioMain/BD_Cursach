@@ -726,6 +726,11 @@ CREATE OR REPLACE PACKAGE DIAGNOSE_PACK AS
         user_a int
     )
         RETURN SYS_REFCURSOR;
+
+    FUNCTION ANALYSE_DIAGNOSE(
+        JSON CLOB
+    )
+    RETURN SYS_REFCURSOR;
 END DIAGNOSE_PACK;
 
 CREATE OR REPLACE PACKAGE BODY DIAGNOSE_PACK AS
@@ -868,6 +873,33 @@ BEGIN
                                      OR ADMIN.DIAGNOSES.PATIENT_ID = user_a;
 
     RETURN v_cursor;
+END;
+
+FUNCTION ANALYSE_DIAGNOSE(
+    JSON CLOB
+)
+RETURN SYS_REFCURSOR
+AS
+    v_cursor SYS_REFCURSOR;
+
+    v_count integer;
+BEGIN
+
+    SELECT COUNT(*) INTO v_count FROM JSON_TABLE (JSON, '$[*]' COLUMNS (i number PATH '$.id'));
+
+    OPEN v_cursor FOR SELECT * FROM ADMIN.DISEASES DS
+                               WHERE (SELECT COUNT(*)
+                                     FROM DISEASESTOSYMPTOMS
+                                     WHERE DISEASESTOSYMPTOMS.DISEASE_ID = DS.DISEASE_ID
+                                     AND DISEASESTOSYMPTOMS.SYMPTOM_ID =
+                                         ANY (SELECT js.i FROM JSON_TABLE (JSON, '$[*]' COLUMNS (i number PATH '$.id')) js)) = v_count;
+
+    RETURN v_cursor;
+
+EXCEPTION
+    WHEN OTHERS THEN BEGIN
+        RAISE_APPLICATION_ERROR(-20000, SQLERRM);
+    END;
 END;
 END DIAGNOSE_PACK;
 

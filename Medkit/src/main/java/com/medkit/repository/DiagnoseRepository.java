@@ -2,7 +2,6 @@ package com.medkit.repository;
 
 import com.medkit.model.Diagnose;
 import com.medkit.model.DiagnoseState;
-import com.medkit.model.Symptom;
 import com.medkit.repository.interfaces.OracleRepositoryBase;
 import oracle.jdbc.OracleTypes;
 

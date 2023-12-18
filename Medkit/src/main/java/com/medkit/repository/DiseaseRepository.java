@@ -1,7 +1,9 @@
 package com.medkit.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.medkit.forms.IdForm;
 import com.medkit.model.Disease;
-import com.medkit.model.Symptom;
 import com.medkit.repository.interfaces.OracleRepositoryBase;
 import oracle.jdbc.OracleTypes;
 
@@ -96,6 +98,27 @@ public class DiseaseRepository extends OracleRepositoryBase<Disease> {
         String sql = "{call ? := ADMIN.DISEASE_PACK.GET_ALL_DISEASES()}";
         try (CallableStatement statement = connection.prepareCall(sql)) {
             statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            statement.execute();
+
+            diseases = parseResultSet(statement.getObject(1, ResultSet.class));
+        }
+
+        return diseases;
+    }
+
+    public List<Disease> analyze(List<IdForm> forms) throws SQLException, JsonProcessingException {
+        List<Disease> diseases;
+
+        String sql = "{call ? := ADMIN.DIAGNOSE_PACK.ANALYSE_DIAGNOSE(?)}";
+        try (CallableStatement statement = connection.prepareCall(sql)) {
+            statement.registerOutParameter(1, OracleTypes.CURSOR);
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            String json = mapper.writeValueAsString(forms);
+
+            statement.setString(2, json);
 
             statement.execute();
 

@@ -196,19 +196,14 @@ public class DiagnoseController {
 
             assert instance != null;
 
-            List<Disease> diseases = new ArrayList<>();
+            List<Disease> diseases;
 
             if (!symptoms.isEmpty()) {
-                for (Disease disease : instance.getDiseaseRepository().getAll()) {
-                    List<DiseaseToSymptom> links = instance.getMTMConnector().getDiseaseToSymptomByDisease(disease.getId());
+                List<IdForm> forms = new ArrayList<>();
 
-                    if (links.stream().anyMatch(
-                            _link -> symptoms.stream().anyMatch(
-                            _symptom -> _link.getSymptomId() == _symptom.getId()))) {
+                symptoms.forEach(i -> forms.add(new IdForm(i.getId())));
 
-                        diseases.add(disease);
-                    }
-                }
+                diseases = instance.getDiseaseRepository().analyze(forms);
             }
             else
                 diseases = instance.getDiseaseRepository().getAll();

@@ -43,6 +43,8 @@ SELECT * FROM ADMIN.SYMPTOMS SYMP
 
 SELECT COUNT(*) FROM ADMIN.USERS;
 
+
+
 commit;
 
 SELECT * FROM USERS;
@@ -56,3 +58,23 @@ SELECT * FROM ADMIN.USERS WHERE SURNAME LIKE 'Окулич' AND NAME LIKE 'Дм�
 CREATE INDEX FULLNAME_INDEX ON USERS (NAME, SURNAME, PATRONYMIC);
 
 DROP INDEX FULLNAME_INDEX;
+
+DECLARE
+    v_cursor SYS_REFCURSOR;
+
+    v_row ADMIN.DISEASES%rowtype;
+BEGIN
+    v_cursor := ADMIN.DIAGNOSE_PACK.ANALYSE_DIAGNOSE('[{"id":"102"},{"id":"107"}]');
+
+    FETCH v_cursor INTO v_row;
+
+    WHILE (v_cursor%FOUND) LOOP
+
+    DBMS_OUTPUT.PUT_LINE(v_row.NAME);
+
+    FETCH v_cursor INTO v_row;
+
+    end loop;
+end;
+
+/
